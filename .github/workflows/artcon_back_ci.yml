@@ -2,9 +2,9 @@ name: ArtCon_Back_CI
 
 on:
   push:
-    branches: [ "Dev" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "Dev" ]
+    branches: [ "dev" ]
 
 jobs:
   build:
