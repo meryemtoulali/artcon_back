@@ -1,24 +1,22 @@
 package com.artcon.artcon_back.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
-public class Utilisateur {
+@Table(name = "\"user\"")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincrement
     private Long Id;
     private String login;
     private String password;
 
-    public Utilisateur(String login, String password) {
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
     }
 
-    public Utilisateur() { }
+    public User() { }
 
     public Long getId() {
         return Id;
@@ -46,7 +44,7 @@ public class Utilisateur {
 
     @Override
     public String toString() {
-        return "Utilisateur{" +
+        return "User{" +
                 "Id=" + Id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
