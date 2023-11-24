@@ -1,5 +1,7 @@
 package com.artcon.artcon_back.controller;
 
+import com.artcon.artcon_back.model.LoginRequest;
+import com.artcon.artcon_back.model.LoginResponse;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -33,5 +35,13 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody User user){
         User newUser = userService.addUser(user);
         return new ResponseEntity<>(newUser,HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request){
+        LoginResponse response = new LoginResponse();
+        response.setSuccess(true);
+        response.setMessage("Login successful");
+        return response;
     }
 }
