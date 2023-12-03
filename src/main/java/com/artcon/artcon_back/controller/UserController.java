@@ -4,15 +4,18 @@ import com.artcon.artcon_back.model.LoginRequest;
 import com.artcon.artcon_back.model.LoginResponse;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -43,5 +46,13 @@ public class UserController {
         response.setSuccess(true);
         response.setMessage("Login successful");
         return response;
+    }
+
+    @PostMapping("/{userId}/upload-profile-picture")
+    public ResponseEntity<String> uploadProfilePicture(
+            @PathVariable Long userId,
+            @RequestParam("picture") MultipartFile file) {
+        userService.uploadProfilePicture(userId, file);
+        return ResponseEntity.ok("Profile picture uploaded successfully");
     }
 }

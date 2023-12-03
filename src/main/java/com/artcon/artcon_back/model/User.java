@@ -2,52 +2,187 @@ package com.artcon.artcon_back.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "\"user\"")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincrement
-    private Long Id;
-    private String login;
-    private String password;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Integer id;
+
+    @Column(name = "user_firstname")
+    private String firstname;
+
+    @Column(name = "user_lastname")
+    private String lastname;
+
+    @Column(name = "user_username", unique = true)
+    private String username;
+
+    @Column(name = "user_email", unique = true)
+    private String email;
+
+    @Column(name = "user_password_hash")
+    private String passwordHash;
+
+    @Column(name = "user_type")
+    private String type;
+
+    @Column(name = "user_birthday")
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
+
+    @Column(name = "user_picture")
+    private String picture;
+
+    @Column(name = "user_banner")
+    private String banner;
+
+    @Column(name = "user_phone_number")
+    private String phoneNumber;
+
+    @Column(name = "user_bio", length = 1000) // Set the maximum length as needed
+    private String bio;
+
+    @Column(name = "user_followers_count")
+    private Integer followersCount;
+
+    @Column(name = "user_following_count")
+    private Integer followingCount;
+
 
     public User(String login, String password) {
-        this.login = login;
-        this.password = password;
+        this.username = login;
+        this.passwordHash = password;
     }
 
     public User() { }
 
-    public Long getId() {
-        return Id;
+    public User(String firstname, String lastname, String username, String email, String passwordHash, String type, Date birthday, String picture, String banner, String phoneNumber, String bio) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.type = type;
+        this.birthday = birthday;
+        this.picture = picture;
+        this.banner = banner;
+        this.phoneNumber = phoneNumber;
+        this.bio = bio;
     }
 
-    public void setId(Long id) {
-        Id = id;
+    public Integer getId() {
+        return id;
     }
 
-    public String getLogin() {
-        return login;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getPassword() {
-        return password;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getLastname() {
+        return lastname;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "Id=" + Id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getBanner() {
+        return banner;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Integer getFollowersCount() {
+        return followersCount;
+    }
+
+    public void setFollowersCount(Integer followersCount) {
+        this.followersCount = followersCount;
+    }
+
+    public Integer getFollowingCount() {
+        return followingCount;
+    }
+
+    public void setFollowingCount(Integer followingCount) {
+        this.followingCount = followingCount;
     }
 }
