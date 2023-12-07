@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,13 @@ public class User implements UserDetails {
     private Role role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+//        return List.of(new SimpleGrantedAuthority(role.name()));
+        if (role != null) {
+            return List.of(new SimpleGrantedAuthority(role.name()));
+        } else {
+            // If role is null, return an empty list or some default authorities
+            return Collections.emptyList();
+        }
     }
 
     @Override

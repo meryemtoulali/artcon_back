@@ -27,7 +27,7 @@ public class UserController {
     @GetMapping("/find/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id){
         User user = userService.findUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(user);
     }
 
     /*@PostMapping("/add")
