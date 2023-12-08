@@ -1,188 +1,93 @@
 package com.artcon.artcon_back.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "\"user\"")
-public class User {
+public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincrement
+    @Column(name = "id")
     private Integer id;
-
-    @Column(name = "user_firstname")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @Column(name = "firstname")
     private String firstname;
-
-    @Column(name = "user_lastname")
+    @Column(name = "lastname")
     private String lastname;
-
-    @Column(name = "user_username", unique = true)
+    @Column(name = "username", unique = true)
     private String username;
-
-    @Column(name = "user_email", unique = true)
+    @Column(name = "email", unique = true)
     private String email;
-
-    @Column(name = "user_password_hash")
+    @Column(name = "password_hash")
     private String passwordHash;
-
-    @Column(name = "user_type")
+    @Column(name = "type")
     private String type;
-
-    @Column(name = "user_birthday")
+    @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
-
-    @Column(name = "user_picture")
+    @Column(name = "profile_picture")
     private String picture;
-
-    @Column(name = "user_banner")
+    @Column(name = "profile_banner")
     private String banner;
-
-    @Column(name = "user_phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
-
-    @Column(name = "user_bio", length = 1000) // Set the maximum length as needed
+    @Column(name = "bio", length = 1000)
     private String bio;
+    @Column(name = "followers_count")
+    private Integer followers_count;
+    @Column(name = "following_count")
+    private Integer following_count;
 
-    @Column(name = "user_followers_count")
-    private Integer followersCount;
-
-    @Column(name = "user_following_count")
-    private Integer followingCount;
-
-
-    public User(String login, String password) {
-        this.username = login;
-        this.passwordHash = password;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority(role.name()));
+        if (role != null) {
+            return List.of(new SimpleGrantedAuthority(role.name()));
+        } else {
+            // If role is null, return an empty list or some default authorities
+            return Collections.emptyList();
+        }
     }
 
-    public User() { }
-
-    public User(String firstname, String lastname, String username, String email, String passwordHash, String type, Date birthday, String picture, String banner, String phoneNumber, String bio) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.username = username;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.type = type;
-        this.birthday = birthday;
-        this.picture = picture;
-        this.banner = banner;
-        this.phoneNumber = phoneNumber;
-        this.bio = bio;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public Integer getId() {
-        return id;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getFirstname() {
-        return firstname;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
 
-    public String getLastname() {
-        return lastname;
-    }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getBanner() {
-        return banner;
-    }
-
-    public void setBanner(String banner) {
-        this.banner = banner;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public Integer getFollowersCount() {
-        return followersCount;
-    }
-
-    public void setFollowersCount(Integer followersCount) {
-        this.followersCount = followersCount;
-    }
-
-    public Integer getFollowingCount() {
-        return followingCount;
-    }
-
-    public void setFollowingCount(Integer followingCount) {
-        this.followingCount = followingCount;
-    }
 }

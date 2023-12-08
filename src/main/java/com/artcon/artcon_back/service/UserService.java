@@ -1,20 +1,27 @@
 package com.artcon.artcon_back.service;
 
 import com.artcon.artcon_back.model.User;
+import com.artcon.artcon_back.config.JwtService;
+import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
     private UserRepository userRepository;
-
-    @Autowired
     private FileStorageService fileStorageService;
 
     //Insert a user
@@ -28,13 +35,43 @@ public class UserService {
     }
 
     //Select user by ID
-    public User findUserById(Long id){
+    public User findUserById(Integer id){
         return userRepository.findUserById(id).orElseThrow(
                 () -> new RuntimeException("User not found")
         );
     }
 
-    public void uploadProfilePicture(Long userId, MultipartFile file) {
+    public LoginResponse register(RegisterRequest request) {
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .location(request.getLocation())
+                .birthday(request.getBirthday())
+                .gender(request.getGender())
+                .phonenumber(request.getPhonenumber())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
+                .build();
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        return LoginResponse.builder().token(jwtToken).build();
+    }
+    public LoginResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        var user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        return LoginResponse.builder().token(jwtToken).build();
+    }
+
+    public void uploadProfilePicture(Integer userId, MultipartFile file) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         // Save the file and get the file URL
@@ -47,5 +84,4 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
-
 }
