@@ -18,12 +18,7 @@ import java.util.List;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    @Autowired
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUser() {
@@ -66,10 +61,9 @@ public class UserController {
     }
 
 
-
     @PostMapping("/{userId}/upload-profile-picture")
     public ResponseEntity<String> uploadProfilePicture(
-            @PathVariable Long userId,
+            @PathVariable Integer userId,
             @RequestParam("picture") MultipartFile file) {
         userService.uploadProfilePicture(userId, file);
         return ResponseEntity.ok("Profile picture uploaded successfully");

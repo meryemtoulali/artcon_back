@@ -21,7 +21,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private FileStorageService fileStorageService;
 
     //Insert a user
@@ -50,8 +52,8 @@ public class UserService {
                 .location(request.getLocation())
                 .birthday(request.getBirthday())
                 .gender(request.getGender())
-                .phonenumber(request.getPhonenumber())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .phone_number(request.getPhonenumber())
+                .password_hash(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
