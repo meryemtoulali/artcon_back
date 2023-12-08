@@ -6,18 +6,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Artist_type {
+public class ArtistType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long artist_type_id;
     private String artist_type_name;
 
-    public Artist_type(Long artist_type_id, String artist_type_name) {
+    public ArtistType(Long artist_type_id, String artist_type_name) {
         this.artist_type_id = artist_type_id;
         this.artist_type_name = artist_type_name;
     }
 
-    public Artist_type() {
+    public ArtistType() {
 
     }
 
