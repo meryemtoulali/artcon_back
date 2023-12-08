@@ -41,6 +41,8 @@ public class User implements UserDetails {
     private String password_hash;
     @Column(name = "type")
     private String type;
+    @Column(name = "title")
+    private String title;
     @Column(name = "gender")
     private String gender;
     @Column(name = "phone_number")
@@ -97,137 +99,78 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public Role getRole() {
-        return role;
-    }
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public String getFirstname() {
-        return firstname;
     }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
-    }
 
     public void setPassword_hash(String passwordHash) {
         this.password_hash = passwordHash;
     }
 
-    public String getType() {
-        return type;
-    }
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Date getBirthday() {
-        return birthday;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
-    public String getPicture() {
-        return picture;
-    }
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public String getBanner() {
-        return banner;
     }
 
     public void setBanner(String banner) {
         this.banner = banner;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
 
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getBio() {
-        return bio;
     }
 
     public void setBio(String bio) {
         this.bio = bio;
     }
 
-    public Integer getFollowers_count() {
-        return followers_count;
-    }
-
     public void setFollowers_count(Integer followers_count) {
         this.followers_count = followers_count;
     }
 
-    public Integer getFollowing_count() {
-        return following_count;
-    }
 
     public void setFollowing_count(Integer following_count) {
         this.following_count = following_count;

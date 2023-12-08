@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.google.common.io.Files.getFileExtension;
 
 @Component
 public class DataBucketUtil {
@@ -65,7 +68,9 @@ public class DataBucketUtil {
             if(file.getOriginalFilename() == null){
                 throw new Exception("Original file name is null");
             }
-            File convertedFile = new File(file.getOriginalFilename());
+//            File convertedFile = new File(file.getOriginalFilename());
+            File convertedFile = Files.createTempFile("uploadedFile", getFileExtension(file.getOriginalFilename())).toFile();
+
             FileOutputStream outputStream = new FileOutputStream(convertedFile);
             outputStream.write(file.getBytes());
             outputStream.close();

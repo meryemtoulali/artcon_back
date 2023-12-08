@@ -26,22 +26,95 @@ public class UserService {
     @Autowired
     private FileStorageService fileStorageService;
 
-    //Insert a user
-    public User addUser(User user){
-        return userRepository.save(user);
-    }
-
     //Select user by
-    public List<User> findAllUsers(){
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     //Select user by ID
-    public User findUserById(Integer id){
+    public User findUserById(Integer id) {
         return userRepository.findUserById(id).orElseThrow(
-                () -> new RuntimeException("User not found")
+                () -> new EntityNotFoundException("User not found")
         );
     }
+
+    public void updateUser(Integer userId, UpdateUserRequest updateUserRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Update user fields based on updateUserRequest
+        if (updateUserRequest.getBio() != null) {
+            user.setBio(updateUserRequest.getBio());
+        }
+
+        if (updateUserRequest.getFirstname() != null) {
+            user.setFirstname(updateUserRequest.getFirstname());
+        }
+
+        if (updateUserRequest.getLastname() != null) {
+            user.setLastname(updateUserRequest.getLastname());
+        }
+
+        if (updateUserRequest.getLocation() != null) {
+            user.setLocation(updateUserRequest.getLocation());
+        }
+
+        if (updateUserRequest.getGender() != null) {
+            user.setGender(updateUserRequest.getGender());
+        }
+
+        if (updateUserRequest.getPhone_number() != null) {
+            user.setPhone_number(updateUserRequest.getPhone_number());
+        }
+
+        if (updateUserRequest.getTitle() != null) {
+            user.setTitle(updateUserRequest.getTitle());
+        }
+
+        if (updateUserRequest.getType() != null) {
+            user.setType(updateUserRequest.getType());
+        }
+
+        if (updateUserRequest.getUsername() != null) {
+            user.setUsername(updateUserRequest.getUsername());
+        }
+
+        if (updateUserRequest.getPicture() != null) {
+            // Save the file and get the file URL
+            try {
+                String fileUrl = fileStorageService.saveFile(updateUserRequest.getPicture());
+                user.setPicture(fileUrl);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (updateUserRequest.getBanner() != null) {
+            try {
+                String fileUrl = fileStorageService.saveFile(updateUserRequest.getBanner());
+                user.setBanner(fileUrl);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (updateUserRequest.getBirthday() != null) {
+            user.setBirthday(updateUserRequest.getBirthday());
+        }
+        userRepository.save(user);
+    }
+
+    public void deleteUser(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        userRepository.delete(user);
+    }
+
+    public List<User> searchUsers(String query) {
+        // searching by username containing the query
+        return userRepository.findByUsernameContainingIgnoreCase(query);
+    }
+
 
     public LoginResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -58,8 +131,13 @@ public class UserService {
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return LoginResponse.builder().token(jwtToken).build();
+        return LoginResponse.builder()
+                .token(jwtToken)
+                .username(user.getUsername())
+                .userId(user.getId())
+                .build();
     }
+
     public LoginResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -70,7 +148,11 @@ public class UserService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return LoginResponse.builder().token(jwtToken).build();
+        return LoginResponse.builder()
+                .token(jwtToken)
+                .username(user.getUsername())
+                .userId(user.getId())
+                .build();
     }
 
     public void uploadProfilePicture(Integer userId, MultipartFile file) {

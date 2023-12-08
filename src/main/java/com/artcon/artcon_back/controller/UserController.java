@@ -1,10 +1,8 @@
 package com.artcon.artcon_back.controller;
 
-import com.artcon.artcon_back.model.LoginRequest;
-import com.artcon.artcon_back.model.LoginResponse;
-import com.artcon.artcon_back.model.RegisterRequest;
-import com.artcon.artcon_back.model.User;
+import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,43 +19,78 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUser() {
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id){
-        User user = userService.findUserById(id);
-        return ResponseEntity.ok(user);
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId){
+        try {
+            User user = userService.findUserById(userId);
+            return ResponseEntity.ok(user);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-//    @PostMapping("/add")
-//    public ResponseEntity<User> addUser(@RequestBody User user){
-//        User newUser = userService.addUser(user);
-//        return new ResponseEntity<>(newUser,HttpStatus.CREATED);
-//    }
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUser(@PathVariable Integer userId,
+                                           @RequestParam(required = false) MultipartFile picture,
+                                           @RequestParam(required = false) MultipartFile banner,
+                                           @ModelAttribute UpdateUserRequest updateUserRequest) {
+        try {
+            updateUserRequest.setPicture(picture);
+            updateUserRequest.setBanner(banner);
+            userService.updateUser(userId, updateUserRequest);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-//    @PostMapping("/login")
-//    public LoginResponse login(@RequestBody LoginRequest request){
-//        LoginResponse response = new LoginResponse();
-//        response.setSuccess(true);
-//        response.setMessage("Login successful");
-//        return response;
-//    }
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
+        try {
+            userService.deleteUser(userId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
+        List<User> users = userService.searchUsers(query);
+        return ResponseEntity.ok(users);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(
             @RequestBody RegisterRequest request
     ){
-        return ResponseEntity.ok(userService.register(request));
+        try {
+            LoginResponse loginResponse = userService.register(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
             @RequestBody LoginRequest request
     ) {
-        return ResponseEntity.ok(userService.login(request));
+        try {
+            LoginResponse loginResponse = userService.login(request);
+            return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -65,7 +98,15 @@ public class UserController {
     public ResponseEntity<String> uploadProfilePicture(
             @PathVariable Integer userId,
             @RequestParam("picture") MultipartFile file) {
-        userService.uploadProfilePicture(userId, file);
-        return ResponseEntity.ok("Profile picture uploaded successfully");
+        try {
+            userService.uploadProfilePicture(userId, file);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
+
 }
