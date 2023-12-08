@@ -2,29 +2,30 @@ package com.artcon.artcon_back.service;
 
 import com.artcon.artcon_back.model.ArtistType;
 import com.artcon.artcon_back.repository.ArtistTypeRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class ArtistTypeService {
-    private final ArtistTypeRepository artist_typeRepository;
+    private final ArtistTypeRepository artistTypeRepository;
 
     public ArtistTypeService(ArtistTypeRepository artistTypeRepository) {
-        artist_typeRepository = artistTypeRepository;
+        this.artistTypeRepository = artistTypeRepository;
     }
 
-    //Insert an artist_type
-    public ArtistType addArtist_type(ArtistType artist_type){
-        return artist_typeRepository.save(artist_type);
+    //Insert an artistType
+    public ArtistType addArtistType(ArtistType artistType){
+        return artistTypeRepository.save(artistType);
     }
 
-    //Select all artist_type
-    public List<ArtistType> findAllArtist_type() {
-        return artist_typeRepository.findAll();
+    //Select all artistType
+    public List<ArtistType> findAllArtistType() {
+        return artistTypeRepository.findAll();
     }
 
-    // Select artist_type by ID
-    public ArtistType findArtist_typeById(Long id){
-        return artist_typeRepository.findArtistTypeById(id).orElseThrow(
+    // Select artistType by ID
+    public ArtistType findArtistTypeById(Long id){
+        return artistTypeRepository.findArtistTypeById(id).orElseThrow(
                 () -> new RuntimeException("Artist type not found")
         );
     }
