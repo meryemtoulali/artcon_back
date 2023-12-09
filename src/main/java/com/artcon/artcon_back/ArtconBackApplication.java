@@ -1,6 +1,7 @@
 package com.artcon.artcon_back;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 @SpringBootApplication
 @PropertySource("file:src/main/resources/application-local.properties")
 @RestController
+@EnableAutoConfiguration
+
 public class ArtconBackApplication {
 
 	public static void main(String[] args) {
