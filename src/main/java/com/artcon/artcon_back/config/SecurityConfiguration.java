@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/user/login").permitAll()  // Permit all requests to /user/login without authentication
                                 .requestMatchers("/user/register").permitAll()
                                 .requestMatchers("/demo").authenticated() // Require authentication for any other request under /user/**
+                                .requestMatchers("/location/**").permitAll()
                                 .anyRequest().permitAll()             // Authenticate any other request
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

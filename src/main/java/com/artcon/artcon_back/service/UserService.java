@@ -25,7 +25,6 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private FileStorageService fileStorageService;
-
     //Select user by
     public List<User> findAllUsers() {
         return userRepository.findAll();
