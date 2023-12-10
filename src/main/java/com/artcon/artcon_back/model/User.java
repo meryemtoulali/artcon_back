@@ -9,12 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
+import java.util.*;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -62,6 +59,8 @@ public class User implements UserDetails {
     private Integer followers_count;
     @Column(name = "following_count")
     private Integer following_count;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PortfolioPost> portfolioPosts = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -72,6 +71,16 @@ public class User implements UserDetails {
             // If role is null, return an empty list or some default authorities
             return Collections.emptyList();
         }
+    }
+
+    public void addPortfolioPost(PortfolioPost portfolioPost) {
+        portfolioPosts.add(portfolioPost);
+        portfolioPost.setUser(this);
+    }
+
+    public void removePortfolioPost(PortfolioPost portfolioPost) {
+        portfolioPosts.remove(portfolioPost);
+        portfolioPost.setUser(null);
     }
 
     @Override

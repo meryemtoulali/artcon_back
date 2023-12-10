@@ -108,5 +108,17 @@ public class UserController {
         }
     }
 
+    //get all portfolio posts for a user
+    @GetMapping("/{userId}/portfolio")
+    public ResponseEntity<List<PortfolioPost>> getPortfolioPosts(@PathVariable Integer userId) {
+        try {
+            List<PortfolioPost> portfolioPosts = userService.getPortfolioPosts(userId);
+            return ResponseEntity.ok(portfolioPosts);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

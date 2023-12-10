@@ -3,6 +3,7 @@ package com.artcon.artcon_back.service;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.config.JwtService;
 import com.artcon.artcon_back.model.*;
+import com.artcon.artcon_back.repository.PortfolioPostRepository;
 import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -115,7 +116,6 @@ public class UserService {
         return userRepository.findByUsernameContainingIgnoreCase(query);
     }
 
-
     public LoginResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -167,5 +167,11 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<PortfolioPost> getPortfolioPosts(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return user.getPortfolioPosts();
     }
 }
