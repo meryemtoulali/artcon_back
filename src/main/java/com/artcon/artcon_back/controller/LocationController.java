@@ -27,11 +27,9 @@ public class LocationController {
     }
 
     @GetMapping("/all")
-    public List<String> getLocations(){
+    public ResponseEntity<List<Location>> getLocations(){
         List<Location> locations = locationRepository.findAll();
-        return locations.stream()
-                .map(Location::getName)
-                .collect(Collectors.toList());
+        return new ResponseEntity<>(locations, HttpStatus.OK);
     }
 
     @PostMapping("/addlocations")
