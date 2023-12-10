@@ -9,11 +9,11 @@ import jakarta.persistence.Id;
 public class ArtistType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long artist_type_id;
+    private Long Id;
     private String artist_type_name;
 
     public ArtistType(Long artist_type_id, String artist_type_name) {
-        this.artist_type_id = artist_type_id;
+        this.Id = artist_type_id;
         this.artist_type_name = artist_type_name;
     }
 
@@ -21,12 +21,12 @@ public class ArtistType {
 
     }
 
-    public Long getArtist_type_id() {
-        return artist_type_id;
+    public Long getId() {
+        return Id;
     }
 
-    public void setArtist_type_id(Long artist_type_id) {
-        this.artist_type_id = artist_type_id;
+    public void setId(Long id) {
+        this.Id = id;
     }
 
     public String getArtist_type_name() {

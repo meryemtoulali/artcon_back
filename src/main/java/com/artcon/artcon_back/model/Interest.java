@@ -9,11 +9,11 @@ import jakarta.persistence.Id;
 public class Interest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long interest_id;
+    private Long Id;
     private String interest_name;
 
-    public Interest(Long interest_id, String interest_name) {
-        this.interest_id = interest_id;
+    public Interest(Long Id, String interest_name) {
+        this.Id = Id;
         this.interest_name = interest_name;
     }
 
@@ -21,12 +21,12 @@ public class Interest {
 
     }
 
-    public Long getInterest_id() {
-        return interest_id;
+    public Long getId() {
+        return Id;
     }
 
-    public void setInterest_id(Long interest_id) {
-        this.interest_id = interest_id;
+    public void setId(Long id) {
+        this.Id = id;
     }
 
     public String getInterest_name() {
