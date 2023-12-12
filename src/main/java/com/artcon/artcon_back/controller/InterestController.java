@@ -1,8 +1,6 @@
 package com.artcon.artcon_back.controller;
 
-import com.artcon.artcon_back.model.ArtistType;
 import com.artcon.artcon_back.model.Interest;
-import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.service.InterestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +32,7 @@ public class InterestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Interest> addInterest(Interest interest){
+    public ResponseEntity<Interest> addInterest(@RequestBody Interest interest){
         Interest newInterest = interestService.addInterest(interest);
         return new ResponseEntity<>(newInterest,HttpStatus.OK);
     }
