@@ -2,80 +2,69 @@ package com.artcon.artcon_back.model;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+
 @Entity
 @Table(name = "\"post\"")
+
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Integer post_id;
+    private Integer id;
 
-    private String userID;
-    private String userName;
-
-    private Integer category_id;
-    private String category;
+    @Column(name = "description")
     private String description;
+    @Column(name = "postImgUrl")
     private String postImgURL;
+    @Column(name = "likes")
+    private Integer likes;
+    @Column(name = "dateTime")
+    private Date date;
 
-    private int likes;
-    private Timestamp dateTime;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private static User user;
 
-    public Post() { }
+    @Transient
+    private Integer user_id;
 
-    public Post(Integer post_id, String userID, String userName, Integer category_id, String category,
-                String description, String postImgURL, int likes, Timestamp dateTime) {
-        super();
-        this.post_id = post_id;
-        this.userID = userID;
-        this.userName = userName;
-        this.category_id = category_id;
-        this.category = category;
-        this.description = description;
-        this.postImgURL = postImgURL;
+
+    public void setLikes(Integer likes) {
         this.likes = likes;
-        this.dateTime = dateTime;
     }
 
-    public Integer getCategory_id() {
-        return category_id;
+    public Integer getUser_id() {
+        return user_id;
     }
 
-    public void setCategory_id(Integer category_id) {
-        this.category_id = category_id;
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
-    public Integer getPost_id() {
-        return post_id;
+    @ManyToOne
+    @JoinColumn(name = "interest_id")
+    private static Interest interest;
+
+    @Transient
+    private static Integer interest_id;
+
+    public static Integer getInterest_id() {
+        return interest_id;
     }
 
-    public void setPost_id(Integer post_id) {
-        this.post_id = post_id;
+    public void setInterest_id(Integer interest_id) {
+        this.interest_id = interest_id;
     }
 
-    public String getUserID() {
-        return userID;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setId(Integer post_id) {
+        this.id = post_id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getDescription() {
         return description;
@@ -101,11 +90,41 @@ public class Post {
         this.likes = likes;
     }
 
-    public Timestamp getDateTime() {
-        return dateTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateTime(Timestamp dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public static Interest getInterest() {
+        return interest;
+    }
+
+    public void setInterest(Interest interest) {
+        this.interest = interest;
+    }
+
+    public Post() { }
+
+    public Post(Integer id, String description, String postImgURL, Integer likes, Date date, User user, Integer user_id, Interest interest, Integer interest_id) {
+        this.id = id;
+        this.description = description;
+        this.postImgURL = postImgURL;
+        this.likes = likes;
+        this.date = date;
+        this.user = user;
+        this.user_id = user_id;
+        this.interest = interest;
+        this.interest_id = interest_id;
     }
 }
