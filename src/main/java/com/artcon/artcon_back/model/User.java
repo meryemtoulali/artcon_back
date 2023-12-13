@@ -3,6 +3,7 @@ package com.artcon.artcon_back.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "\"user\"")
@@ -52,6 +53,16 @@ public class User {
     @Column(name = "user_following_count")
     private Integer followingCount;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id" , referencedColumnName = "user_id")
+    private List<Post> posts ;
+
+    @ManyToMany
+    @JoinTable(name = "user_interest",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "interest_id"))
+    private List<Interest> interests;
+
 
     public User(String login, String password) {
         this.username = login;
@@ -60,7 +71,8 @@ public class User {
 
     public User() { }
 
-    public User(String firstname, String lastname, String username, String email, String passwordHash, String type, Date birthday, String picture, String banner, String phoneNumber, String bio) {
+    public User(Integer id, String firstname, String lastname, String username, String email, String passwordHash, String type, Date birthday, String picture, String banner, String phoneNumber, String bio, Integer followersCount, Integer followingCount, List<Post> posts, List<Interest> interests) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
@@ -72,6 +84,18 @@ public class User {
         this.banner = banner;
         this.phoneNumber = phoneNumber;
         this.bio = bio;
+        this.followersCount = followersCount;
+        this.followingCount = followingCount;
+        this.posts = posts;
+        this.interests = interests;
+    }
+
+    public List<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<Interest> interests) {
+        this.interests = interests;
     }
 
     public Integer getId() {
@@ -184,5 +208,13 @@ public class User {
 
     public void setFollowingCount(Integer followingCount) {
         this.followingCount = followingCount;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

@@ -1,41 +1,48 @@
 package com.artcon.artcon_back.controller;
 
+import com.artcon.artcon_back.model.PostRequest;
+import com.artcon.artcon_back.model.PostResponse;
 import com.artcon.artcon_back.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.artcon.artcon_back.model.Post;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 
 @RestController
 @RequestMapping("/post")
+
 public class PostController {
 
     @Autowired
     PostService postService;
 
     @PostMapping("/add")
-    public void submitPost(@RequestBody Post body){
-        postService.submitPostToDB(body);
-
-    }
-
-    @GetMapping("/getPost")
-    public ArrayList<Post> retrieveAllPost(){
-        // need to add some changes and ADD THIS ONE /{postId}
-        ArrayList<Post> result=postService.retrivePostFromDB();
-        result.sort((e1, e2) -> e2.getDateTime().compareTo(e1.getDateTime()));
+    public PostResponse submitPost(@RequestBody PostRequest postRequest){
+        postService.submitPostToDB(postRequest);
+        PostResponse result= new PostResponse();
+        result.setSuccess(true);
+        result.setMessage("Post added successfully");
         return result;
     }
-    @DeleteMapping("/delete/{postId}")
-    public void deleteParticularPost(@PathVariable("postId") Integer post_id){
-        postService.deletePostFromDB(post_id);
+
+//get post by post id
+    @GetMapping("/{post_id}")
+    public Post getPost(@PathVariable Integer post_id){
+        System.out.println("Start get control");
+        Post result = postService.getPost(post_id);
+        System.out.println("end get control");
+        return result;
 
     }
+    @DeleteMapping("/delete/{post_id}")
+    public PostResponse deletePost(@PathVariable Integer post_id){
+        postService.deletePost(post_id);
+        PostResponse result= new PostResponse();
+        result.setSuccess(true);
+        result.setMessage("Post deleted successfully");
+        return result;
 
-
-
-
+    }
 
 }
