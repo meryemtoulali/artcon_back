@@ -22,6 +22,8 @@ public class PortfolioPost {
     private Date date;
     @Column(name = "title")
     private String title;
+    @Column(name = "caption")
+    private String caption;
     @Column(name = "media")
     private String media;
     @ManyToOne

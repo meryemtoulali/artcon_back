@@ -4,7 +4,6 @@ import com.artcon.artcon_back.model.PortfolioPost;
 import com.artcon.artcon_back.model.PortfolioPostRequest;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.repository.PortfolioPostRepository;
-import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +55,7 @@ public class PortfolioPostService {
                 .user(user)
                 .date(currentDate)
                 .title(portfolioPostRequest.getTitle())
+                .caption(portfolioPostRequest.getCaption())
                 .media(fileUrl)
                 .build();
         System.out.println("Built portfoliopost");
@@ -97,6 +96,10 @@ public class PortfolioPostService {
 
         if (updatePortfolioPostRequest.getTitle() != null) {
             portfolioPost.setTitle(updatePortfolioPostRequest.getTitle());
+        }
+
+        if (updatePortfolioPostRequest.getCaption() != null) {
+            portfolioPost.setCaption(updatePortfolioPostRequest.getCaption());
         }
 
         if (updatePortfolioPostRequest.getMedia() != null) {

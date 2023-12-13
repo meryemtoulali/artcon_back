@@ -3,7 +3,6 @@ package com.artcon.artcon_back.controller;
 import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -113,6 +112,7 @@ public class UserController {
     public ResponseEntity<List<PortfolioPost>> getPortfolioPosts(@PathVariable Integer userId) {
         try {
             List<PortfolioPost> portfolioPosts = userService.getPortfolioPosts(userId);
+
             return ResponseEntity.ok(portfolioPosts);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
