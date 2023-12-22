@@ -70,16 +70,17 @@ public class PortfolioPostService {
     }
 
     public PortfolioPost getPortfolioPost(Integer portfolioPostId) {
-        PortfolioPost portfolioPost = portfolioPostRepository.findById(portfolioPostId)
-                .orElseThrow(() -> new EntityNotFoundException("Portfolio post not found"));
-
+//        PortfolioPost portfolioPost = portfolioPostRepository.findById(portfolioPostId)
+//                .orElseThrow(() -> new EntityNotFoundException("Portfolio post not found"));
         // Set user information
-        User user = portfolioPost.getUser();
-        portfolioPost.setUserId(user.getId());
-        portfolioPost.setUsername(user.getUsername());
-        portfolioPost.setFirstname(user.getFirstname());
-        portfolioPost.setLastname(user.getLastname());
-        return portfolioPost;
+//        User user = portfolioPost.getUser();
+//        portfolioPost.setUserId(user.getId());
+//        portfolioPost.setUsername(user.getUsername());
+//        portfolioPost.setFirstname(user.getFirstname());
+//        portfolioPost.setLastname(user.getLastname());
+        return portfolioPostRepository.findById(portfolioPostId).orElseThrow(
+                () -> new EntityNotFoundException("Portfolio post not found")
+        );
     }
 
 //    public List<PortfolioPost> getPortfolioPostsByUser(Integer userId) {

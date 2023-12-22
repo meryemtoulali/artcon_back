@@ -1,5 +1,6 @@
 package com.artcon.artcon_back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,6 +60,7 @@ public class User implements UserDetails {
     private Integer followers_count;
     @Column(name = "following_count")
     private Integer following_count;
+    @JsonIgnore // Break the circular reference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PortfolioPost> portfolioPosts = new ArrayList<>();
 
