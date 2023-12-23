@@ -53,6 +53,16 @@ public class User {
     @Column(name = "user_following_count")
     private Integer followingCount;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id" , referencedColumnName = "user_id")
+    private List<Post> posts ;
+
+    @ManyToMany
+    @JoinTable(name = "user_interest",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "interest_id"))
+    private List<Interest> interests;
+
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id" , referencedColumnName = "user_id")
