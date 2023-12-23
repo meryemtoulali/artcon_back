@@ -1,5 +1,8 @@
 package com.artcon.artcon_back.controller;
 
+import com.artcon.artcon_back.model.MessageRequest;
+import com.artcon.artcon_back.model.Message;
+import com.artcon.artcon_back.service.MessageService;
 import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final MessageService messageService;
+
 
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -24,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId){
+    public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId) {
         try {
             User user = userService.findUserById(userId);
             return ResponseEntity.ok(user);
@@ -71,7 +76,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(
             @RequestBody RegisterRequest request
-    ){
+    ) {
         try {
             LoginResponse loginResponse = userService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(loginResponse);
@@ -121,4 +126,29 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/chats")
+    public ResponseEntity<List<Message>> getChats(@PathVariable("userId") Integer userId) {
+        try {
+            List<Message> chats = messageService.getChatsForUser(userId);
+            return ResponseEntity.ok(chats);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PostMapping("/{userId}/start-chat/{receiverId}")
+    public ResponseEntity<Message> startChat(
+            @PathVariable("userId") Integer userId,
+            @PathVariable("receiverId") Integer receiverId,
+            @RequestBody MessageRequest messageRequest) {
+        try {
+            Message message = messageService.startChat(userId, receiverId, messageRequest.getContent());
+            return ResponseEntity.status(HttpStatus.CREATED).body(message);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
