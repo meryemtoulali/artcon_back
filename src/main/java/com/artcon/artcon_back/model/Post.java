@@ -3,6 +3,7 @@ package com.artcon.artcon_back.model;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "\"post\"")
@@ -15,8 +16,27 @@ public class Post {
 
     @Column(name = "description")
     private String description;
-    @Column(name = "postImgUrl")
-    private String postImgURL;
+
+    public Post(Integer id, String description, List<MediaFile> mediaFiles, Integer likes, Date date) {
+        this.id = id;
+        this.description = description;
+        this.mediaFiles = mediaFiles;
+        this.likes = likes;
+        this.date = date;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id" , referencedColumnName = "post_id")
+    private List<MediaFile> mediaFiles;
+
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
+    }
+
+    public void setMediaFiles(List<MediaFile> mediaFiles) {
+        this.mediaFiles = mediaFiles;
+    }
+
     @Column(name = "likes")
     private Integer likes;
     @Column(name = "dateTime")
@@ -26,36 +46,16 @@ public class Post {
     @JoinColumn(name = "user_id")
     private static User user;
 
-    @Transient
-    private Integer user_id;
-
 
     public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
-    public Integer getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
-    }
 
     @ManyToOne
     @JoinColumn(name = "interest_id")
     private static Interest interest;
 
-    @Transient
-    private static Integer interest_id;
-
-    public static Integer getInterest_id() {
-        return interest_id;
-    }
-
-    public void setInterest_id(Integer interest_id) {
-        this.interest_id = interest_id;
-    }
 
     public Integer getId() {
         return id;
@@ -74,14 +74,6 @@ public class Post {
         this.description = description;
     }
 
-    public String getPostImgURL() {
-        return postImgURL;
-    }
-
-    public void setPostImgURL(String postImgURL) {
-        this.postImgURL = postImgURL;
-    }
-
     public int getLikes() {
         return likes;
     }
@@ -98,12 +90,12 @@ public class Post {
         this.date = date;
     }
 
-    public static User getUser() {
+    public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
-        this.user = user;
+        Post.user = user;
     }
 
     public static Interest getInterest() {
@@ -111,20 +103,9 @@ public class Post {
     }
 
     public void setInterest(Interest interest) {
-        this.interest = interest;
+        Post.interest = interest;
     }
 
     public Post() { }
 
-    public Post(Integer id, String description, String postImgURL, Integer likes, Date date, User user, Integer user_id, Interest interest, Integer interest_id) {
-        this.id = id;
-        this.description = description;
-        this.postImgURL = postImgURL;
-        this.likes = likes;
-        this.date = date;
-        this.user = user;
-        this.user_id = user_id;
-        this.interest = interest;
-        this.interest_id = interest_id;
-    }
 }

@@ -2,11 +2,17 @@ package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.PostRequest;
 import com.artcon.artcon_back.model.PostResponse;
+import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.artcon.artcon_back.model.Post;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.net.URISyntaxException;
+import java.util.List;
 
 
 @RestController
@@ -18,7 +24,12 @@ public class PostController {
     PostService postService;
 
     @PostMapping("/add")
-    public PostResponse submitPost(@RequestBody PostRequest postRequest){
+    public PostResponse submitPost( @RequestParam("user_id") Integer userId,
+                                    @RequestParam("description") String description,
+                                    @RequestParam("mediafiles") MultipartFile[] mediafiles,
+                                    @RequestParam("interest_id") Long interestId){
+
+        PostRequest postRequest = new PostRequest(userId, description, mediafiles, interestId);
         postService.submitPostToDB(postRequest);
         PostResponse result= new PostResponse();
         result.setSuccess(true);
@@ -33,7 +44,6 @@ public class PostController {
         Post result = postService.getPost(post_id);
         System.out.println("end get control");
         return result;
-
     }
     @DeleteMapping("/delete/{post_id}")
     public PostResponse deletePost(@PathVariable Integer post_id){
@@ -43,6 +53,12 @@ public class PostController {
         result.setMessage("Post deleted successfully");
         return result;
 
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Post>> getAllUser() {
+        List<Post> posts = postService.findAllPosts();
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
 }

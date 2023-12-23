@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "artcon-407017",
+  "private_key_id": "642102b124c0fe906db8c7063a3d897fef55d0ce",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDwbud+C1A4fm0n\n+Q27RNE3q+Pxvu9AL9S4i0eMo8giS/k+pz7Zij8DXmcQ69uGcYiR3vt+OYbEYrgb\nlVUHGqCDPWSU8udhW/4P15EhGnp6ErBe/yAV8iLxIBIJD+K9XuetxbzjaHdzcJQw\nwgy5kw0I7rPnulqGf1jRFTDvXcpVz6CavXCeaE4jN0Qd+tE168j4xDiReOHotSJw\n1XGpoU94ckJwwDbGNs2tdMxobYZJFgLKEI/+/M/NJKqyw4aa8AuoMbgAbBHsLSG+\nMni7qPT6NHAmKPSTfVVKgexd1GMIMsVsFUbbNXLzKQ62rIeosXigBe3BMzwe4X+Z\npmZs7YuRAgMBAAECggEAHgo5RaQLuJdBM6SYLNzvB/Xjw71PnrUrLoiGXsHK3FAi\nOswCHAN8FoNpvLE/Sxet0M3rnax51FkiOB4LEtlmkyctRTfpJV6tSlTsZtasVUq2\n+xOEsoE/kOFpJ3Uy5uav6yQA0ufnPsbi2QmxtdDz6LkMRMhhjZrlIbB0Xf/ZqylJ\nIAbqcLaB45+MuN2nV4Yj5w6dTErzow+HEZbcxd/3o33YaoVqllC+tEWHXFhlwBAa\nH5XwoK4DCy+5sasTOMYS0k6nhfPUH2Em3f6e6Z4F1b7s/UCwTG7fjwbQ/Jt4OMLB\ntsmAeojR+3EcdM1N/1JrmnqVBn/a8E9peLYUT/V2kQKBgQD6VzkjZ0AiSSO/Y3Fr\nExrE3sS7c7mJppDvW9G33JIbeLWlqn6PDMzG0VZqbgTcE43nbDjtbIWA8sNc/su8\noHTZmOVQ+U6Za+i+M/o2bXjxGBXQ06Z6GaIZaFQnztj4SR4GBXrKVoA1u+u4bdp9\neRx6PdkEr4THBZ2QP+V18nAd6QKBgQD13lgeTKEbNRSsGdOPKjQGSq0OnYpSm2FX\nNlAt3MMe+ZoFdZeK7C9R0sVsfqYYpMpTou85oTXrZyOlbxmQ0P34n4V/ExQOzDcY\nAjJqXPpD93sKRZ2LPNi1pz/ckmgq28BHtDnbEX9YxF8hD0c1haW88VAzK7Z2iBwe\nbkjwOievaQKBgQDYl6qqBOUqRNmW93TjzU2103+nJ4L5o5F2ZpzWVRJcjl2rDg4d\nuldaFTiNMM8nkguOlMXUNbZ0UJXS2ehwNOukcHLHUkw81W4zUklD2gdvoQUO/m/k\n6FSlYuyc3IxAlRJS517LvXeEBij2EqWdNbH72ZLwSOO6RhODAKWJHM8AMQKBgFnU\nCk3HoXTXR9448Vp1CNzjm6ajWE4mBsJeTZzz8zX165fjBqLy97blUsv42aZXTrSP\n6ucbRx/iZtuiY6zNLn0Piy6KQeHGKrrS0qiZn7YFTSbLmGuup1525JYpx3UhJHcO\nGbU4B1bfKAJkGpgrZApMAAkyB0/3Go7jrDJYjPdBAoGBAJwR34boP9wcFkLXsW3f\nUP9jb5q1GSnvF+A817NpyX24y1Et/aniahmbdpzjhKjqnS4aCz1ZWL8dp6a68H7V\n8L5Smhy/YhwtKec/jmirJ4zbrFRiRDrfZ2rmzfNFYfyIN0Ub2u1jZoeY2dJSb9so\nBY7cFyaNqg4pM6h92veNxLyy\n-----END PRIVATE KEY-----\n",
+  "client_email": "artcon-gcp@artcon-407017.iam.gserviceaccount.com",
+  "client_id": "113782401455275662064",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/artcon-gcp%40artcon-407017.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

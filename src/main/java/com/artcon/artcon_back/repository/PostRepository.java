@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post ,Integer> {
-
     List<Post> findAll();
     Post findPostById(Integer Id);
     Post save(Post post);
