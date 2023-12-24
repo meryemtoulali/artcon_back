@@ -39,11 +39,21 @@ public class PostController {
 
 //get post by post id
     @GetMapping("/{post_id}")
-    public Post getPost(@PathVariable Integer post_id){
-        System.out.println("Start get control");
+    public ResponseEntity<Post> getPost(@PathVariable Integer post_id){
+       /* System.out.println("Start get control");
         Post result = postService.getPost(post_id);
+        System.out.println("result name"+ result.getDescription());
         System.out.println("end get control");
-        return result;
+        return result;*/
+        Post post = postService.getPost(post_id);
+        return ResponseEntity.ok(post);
+    }
+    // get post by owner id
+    @GetMapping("/owner/{user_id}")
+    public ResponseEntity<List<Post>> getUserPosts(@PathVariable Integer user_id){
+
+        List<Post> posts = postService.getPostsByUserId(user_id);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{post_id}")
     public PostResponse deletePost(@PathVariable Integer post_id){
@@ -53,12 +63,6 @@ public class PostController {
         result.setMessage("Post deleted successfully");
         return result;
 
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Post>> getAllUser() {
-        List<Post> posts = postService.findAllPosts();
-        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
 }

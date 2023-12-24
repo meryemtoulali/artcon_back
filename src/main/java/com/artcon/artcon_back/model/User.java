@@ -1,5 +1,6 @@
 package com.artcon.artcon_back.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -7,6 +8,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "\"user\"")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user_id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,20 +56,15 @@ public class User {
     @Column(name = "user_following_count")
     private Integer followingCount;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id" , referencedColumnName = "user_id")
-    private List<Post> posts ;
 
-    @ManyToMany
-    @JoinTable(name = "user_interest",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "interest_id"))
-    private List<Interest> interests;
+//    @OneToMany(cascade = CascadeType.ALL)
+  //  @JoinColumn(name = "user_id" , referencedColumnName = "user_id")
+    //private List<Post> posts ;
 
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id" , referencedColumnName = "user_id")
-    private List<Post> posts ;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    //@JsonIgnore
+    private List<Post> posts;
 
     @ManyToMany
     @JoinTable(name = "user_interest",
@@ -228,4 +226,5 @@ public class User {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
 }

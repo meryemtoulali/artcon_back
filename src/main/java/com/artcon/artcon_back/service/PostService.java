@@ -3,6 +3,7 @@ package com.artcon.artcon_back.service;
 import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.repository.InterestRepository;
 import com.artcon.artcon_back.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.artcon.artcon_back.repository.PostRepository;
@@ -31,7 +32,7 @@ public class PostService {
     @Autowired
     private FileStorageService fileStorageService;
 
-
+    @Transactional
     public Post submitPostToDB(PostRequest postRequest){
 
         Date date = new Date();
@@ -70,10 +71,11 @@ public class PostService {
         Post postToSave = new Post();
 
         postToSave.setDescription(description);
-        postToSave.setInterest(interest);
-        System.out.println("this the interest i inserted : "+ interest.getInterest_name());
         postToSave.setUser(user);
         System.out.println("this is user i inserted : "+ user.getUsername());
+        postToSave.setInterest(interest);
+        System.out.println("this the interest i inserted : "+ interest.getInterest_name());
+
         postToSave.setMediaFiles(mediaFiles);
         postToSave.setDate(date);
         postToSave.setLikes(0);
@@ -87,21 +89,15 @@ public class PostService {
     }
 
     public Post getPost(Integer post_id){
-        System.out.println("Start get serv");
-        Post result=postRepo.findPostById(post_id);
-       // User user = Post.getUser();
-       // result.setUser_id(user.getId());
 
-        Interest interest = Post.getInterest();
-        Long interestidLong = interest.getId();
-        //long longValue = interestidLong.longValue();
-        //int interestInt = (int) longValue;
-        //result.setInterest_id(interestInt);
-        System.out.println("end get serv");
+        return postRepo.findById(post_id)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + post_id));
+    }
 
-        //
+    public List<Post> getPostsByUserId(Integer user_id) {
+        List<Post> posts = postRepo.findByUserId(user_id);
 
-        return result;
+        return posts;
     }
 
     public void deletePost(Integer post_id){
@@ -122,4 +118,5 @@ public class PostService {
             throw new IllegalArgumentException("Long value is out of the range of Integer");
         }
     }
+
 }

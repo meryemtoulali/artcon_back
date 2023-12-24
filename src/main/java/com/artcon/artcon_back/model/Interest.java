@@ -18,8 +18,12 @@ public class Interest {
     private String interest_name;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "interest_id" , referencedColumnName = "interest_id")
+ //   @OneToMany(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "interest_id" , referencedColumnName = "interest_id")
+    //private List<Post> posts;
+
+
+    @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL)
     private List<Post> posts;
 
     public Interest(Long id, String interest_name, List<Post> posts) {

@@ -1,13 +1,15 @@
 package com.artcon.artcon_back.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "\"post\"")
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,44 +19,25 @@ public class Post {
     @Column(name = "description")
     private String description;
 
-    public Post(Integer id, String description, List<MediaFile> mediaFiles, Integer likes, Date date) {
-        this.id = id;
-        this.description = description;
-        this.mediaFiles = mediaFiles;
-        this.likes = likes;
-        this.date = date;
-    }
+    //@JsonBackReference
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "interest_id")
+    private Interest interest;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id" , referencedColumnName = "post_id")
     private List<MediaFile> mediaFiles;
 
-    public List<MediaFile> getMediaFiles() {
-        return mediaFiles;
-    }
-
-    public void setMediaFiles(List<MediaFile> mediaFiles) {
-        this.mediaFiles = mediaFiles;
-    }
-
     @Column(name = "likes")
     private Integer likes;
     @Column(name = "dateTime")
     private Date date;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private static User user;
-
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
-    }
-
-
-    @ManyToOne
-    @JoinColumn(name = "interest_id")
-    private static Interest interest;
 
 
     public Integer getId() {
@@ -74,11 +57,11 @@ public class Post {
         this.description = description;
     }
 
-    public int getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
@@ -90,22 +73,30 @@ public class Post {
         this.date = date;
     }
 
+
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
+    }
+
+    public void setMediaFiles(List<MediaFile> mediaFiles) {
+        this.mediaFiles = mediaFiles;
+    }
+
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
-        Post.user = user;
+        this.user = user;
     }
 
-    public static Interest getInterest() {
+    public Interest getInterest() {
         return interest;
     }
 
     public void setInterest(Interest interest) {
-        Post.interest = interest;
+        this.interest = interest;
     }
-
-    public Post() { }
 
 }
