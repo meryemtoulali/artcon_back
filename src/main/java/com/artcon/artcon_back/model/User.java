@@ -1,5 +1,6 @@
 package com.artcon.artcon_back.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,6 +62,9 @@ public class User implements UserDetails {
     private Integer following_count;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PortfolioPost> portfolioPosts = new ArrayList<>();
+    @JsonDeserialize(contentAs = Interest.class)
+    @ManyToMany(mappedBy = "interested",cascade = CascadeType.ALL)
+    private List<Interest> interestList = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -183,5 +187,13 @@ public class User implements UserDetails {
 
     public void setFollowing_count(Integer following_count) {
         this.following_count = following_count;
+    }
+
+    public List<Interest> getInterestList() {
+        return interestList;
+    }
+
+    public void setInterestList(List<Interest> interestList) {
+        this.interestList = interestList;
     }
 }
