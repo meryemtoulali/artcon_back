@@ -1,9 +1,8 @@
 package com.artcon.artcon_back.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Interest {
@@ -12,9 +11,13 @@ public class Interest {
     private Long Id;
     private String interest_name;
 
-    public Interest(Long Id, String interest_name) {
+    @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL)
+    private List<Post> posts;
+
+    public Interest(Long Id, String interest_name, List<Post> posts) {
         this.Id = Id;
         this.interest_name = interest_name;
+        this.posts = posts;
     }
 
     public Interest() {
@@ -35,5 +38,13 @@ public class Interest {
 
     public void setInterest_name(String interest_name) {
         this.interest_name = interest_name;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }
