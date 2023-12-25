@@ -3,11 +3,9 @@ package com.artcon.artcon_back.service;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.config.JwtService;
 import com.artcon.artcon_back.model.*;
-import com.artcon.artcon_back.repository.PortfolioPostRepository;
 import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,10 +20,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private FileStorageService fileStorageService;
+    private final UserRepository userRepository;
+    private final FileStorageService fileStorageService;
+
     //Select user by
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -110,10 +107,10 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public List<User> searchUsers(String query) {
+    //public List<User> searchUsers(String query) {
         // searching by username containing the query
-        return userRepository.findByUsernameContainingIgnoreCase(query);
-    }
+    //    return userRepository.findByUsernameContainingIgnoreCase(query);
+    //}
 
     public LoginResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -172,5 +169,10 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return user.getPortfolioPosts();
+    }
+
+    public List<User> searchUsers(String query){
+        List<User> users = userRepository.searchUser(query);
+        return users;
     }
 }

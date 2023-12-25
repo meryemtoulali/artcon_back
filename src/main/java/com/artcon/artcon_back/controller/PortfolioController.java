@@ -2,7 +2,6 @@ package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.service.PortfolioPostService;
-import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
