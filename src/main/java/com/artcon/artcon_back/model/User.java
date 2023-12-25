@@ -67,10 +67,8 @@ public class User implements UserDetails {
     @JsonIgnore // Break the circular reference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PortfolioPost> portfolioPosts = new ArrayList<>();
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    //@JsonIgnore
     private List<Post> posts;
 
     @Override

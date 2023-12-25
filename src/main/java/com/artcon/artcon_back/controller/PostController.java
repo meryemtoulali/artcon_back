@@ -53,6 +53,7 @@ public class PostController {
     public ResponseEntity<List<Post>> getUserPosts(@PathVariable Integer user_id){
 
         List<Post> posts = postService.getPostsByUserId(user_id);
+        System.out.println("get posts:" + posts.toString());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{post_id}")

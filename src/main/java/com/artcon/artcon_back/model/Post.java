@@ -20,7 +20,7 @@ public class Post {
     private String description;
 
     //@JsonBackReference
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
