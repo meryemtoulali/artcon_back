@@ -5,17 +5,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 
 public class PostRequest implements Serializable {
     private Integer user_id;
     private String description;
-    private MultipartFile[] mediafiles;
+    private Optional<MultipartFile[]> mediafiles;
     private Long interest_id;
 
     public PostRequest() { }
 
-    public PostRequest(Integer user_id, String description, MultipartFile[] mediafiles, Long interest_id) {
+    public PostRequest(Integer user_id, String description, Optional<MultipartFile[]> mediafiles, Long interest_id) {
         this.user_id = user_id;
         this.description = description;
         this.mediafiles = mediafiles;
@@ -38,11 +39,11 @@ public class PostRequest implements Serializable {
         this.description = description;
     }
 
-    public MultipartFile[] getMediafiles() {
+    public Optional<MultipartFile[]> getMediafiles() {
         return mediafiles;
     }
 
-    public void setMediafiles(MultipartFile[] mediafiles) {
+    public void setMediafiles(Optional<MultipartFile[]> mediafiles) {
         this.mediafiles = mediafiles;
     }
 

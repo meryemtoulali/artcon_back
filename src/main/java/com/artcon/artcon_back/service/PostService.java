@@ -11,10 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,13 +44,21 @@ public class PostService {
         String description = postRequest.getDescription();
 
         //media
-        MultipartFile[] files = postRequest.getMediafiles();
+        Optional<MultipartFile[]> files = postRequest.getMediafiles();
 
-        List<MediaFile> mediaFiles = new ArrayList<>();
+        List<MediaFile> mediaFiles;
         // for each file save it in cloud and then save the file_url in
         // a mediaFile and then save the List of media file(setmediafiles
         // in post)
-        Arrays.asList(files).stream().forEach(file -> {
+        // Check if files are not empty
+        //System.out.println("Files length: " + (files != null ? files.length : 0) + "file name : "+ files[0].getOriginalFilename());
+        //if (files != null && files.length > 0) {
+        System.out.println("files check ; " + files.isPresent());
+        //System.out.println("file length : " + files.get().length);
+        if (files.isPresent()) {
+            MultipartFile[] Files = files.get();
+            mediaFiles = new ArrayList<>();
+            Arrays.asList(Files).stream().forEach(file -> {
             try {
                 MediaFile mediaFile = new MediaFile();
                 String fileUrl = null;
@@ -67,6 +72,11 @@ public class PostService {
                 throw new RuntimeException("Error while saving media file", e);
             }
         });
+
+        } else {
+            // No files, set mediaFiles to null
+            mediaFiles = null;
+        }
 
         Post postToSave = new Post();
 

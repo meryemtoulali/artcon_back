@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -26,7 +27,7 @@ public class PostController {
     @PostMapping("/add")
     public PostResponse submitPost( @RequestParam("user_id") Integer userId,
                                     @RequestParam("description") String description,
-                                    @RequestParam("mediafiles") MultipartFile[] mediafiles,
+                                    @RequestParam("mediafiles") Optional<MultipartFile[]> mediafiles,
                                     @RequestParam("interest_id") Long interestId){
 
         PostRequest postRequest = new PostRequest(userId, description, mediafiles, interestId);
