@@ -1,9 +1,11 @@
 package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.*;
+import com.artcon.artcon_back.service.PostService;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final PostService postService;
 
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -121,4 +124,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/home")
+    public ResponseEntity<List<Post>> getHome(){
+        try{
+            List<Post> posts = postService.findAllPosts();
+            return ResponseEntity.ok(posts);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
