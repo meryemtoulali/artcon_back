@@ -125,6 +125,9 @@ public class UserService {
                 .birthday(request.getBirthday())
                 .gender(request.getGender())
                 .phone_number(request.getPhonenumber())
+                .followers_count(0)
+                .following_count(0)
+                .phone_number(request.getPhonenumber())
                 .password_hash(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
