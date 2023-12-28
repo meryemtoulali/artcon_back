@@ -12,7 +12,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
 @SpringBootApplication
-//@PropertySource("file:src/main/resources/application-local.properties")
+@PropertySource("file:src/main/resources/application-local.properties")
 @RestController
 public class ArtconBackApplication {
 
