@@ -124,7 +124,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/home")
+    @GetMapping("/home")
     public ResponseEntity<List<Post>> getHome(){
         try{
             List<Post> posts = postService.findAllPosts();
