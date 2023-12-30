@@ -3,9 +3,10 @@ package com.artcon.artcon_back.service;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.config.JwtService;
 import com.artcon.artcon_back.model.*;
-import com.artcon.artcon_back.repository.PortfolioPostRepository;
+import com.artcon.artcon_back.repository.InterestRepository;
 import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +26,8 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private InterestRepository interestRepository;
     @Autowired
     private FileStorageService fileStorageService;
     //Select user by
@@ -101,6 +105,7 @@ public class UserService {
         if (updateUserRequest.getBirthday() != null) {
             user.setBirthday(updateUserRequest.getBirthday());
         }
+
         userRepository.save(user);
     }
 
@@ -173,4 +178,30 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return user.getPortfolioPosts();
     }
+
+    @Transactional
+    public void selectInterest(Integer userId,List<Long> interests){
+        User user = userRepository.findUserById(userId).orElseThrow(
+                () -> new EntityNotFoundException("User not found")
+        );
+
+        List<Interest> interestList = new ArrayList<>();
+        for (Long id : interests) {
+            // get the interest by id
+            Interest interest = interestRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Interest not found"));
+
+            //Add user to interest
+            interest.getInterested().add(user);
+            interestRepository.save(interest);
+
+            // Add interest to list
+            interestList.add(interest);
+        }
+
+        user.setInterestList(interestList);
+        // Save changes to user
+        userRepository.save(user);
+    }
+
 }
