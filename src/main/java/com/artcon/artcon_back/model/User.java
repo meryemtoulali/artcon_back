@@ -1,6 +1,12 @@
 package com.artcon.artcon_back.model;
 
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +26,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "\"user\"")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincrement
@@ -60,11 +67,15 @@ public class User implements UserDetails {
     private Integer followers_count;
     @Column(name = "following_count")
     private Integer following_count;
+    @JsonIgnore // Break the circular reference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PortfolioPost> portfolioPosts = new ArrayList<>();
     @JsonDeserialize(contentAs = Interest.class)
     @ManyToMany(mappedBy = "interested",cascade = CascadeType.ALL)
     private List<Interest> interestList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -189,11 +200,19 @@ public class User implements UserDetails {
         this.following_count = following_count;
     }
 
+
     public List<Interest> getInterestList() {
         return interestList;
     }
 
     public void setInterestList(List<Interest> interestList) {
         this.interestList = interestList;
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

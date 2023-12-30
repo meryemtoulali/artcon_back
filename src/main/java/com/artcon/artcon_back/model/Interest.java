@@ -1,5 +1,6 @@
 package com.artcon.artcon_back.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @Entity
 public class Interest {
@@ -24,9 +26,13 @@ public class Interest {
             inverseJoinColumns = @JoinColumn(name = "user_Id"))
     private List<User> interested = new ArrayList<>();
 
-    public Interest(Long Id, String interest_name) {
+    @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL)
+    private List<Post> posts;
+
+    public Interest(Long Id, String interest_name, List<Post> posts) {
         this.Id = Id;
         this.interest_name = interest_name;
+        this.posts = posts;
     }
 
     public Interest() {
@@ -49,11 +55,20 @@ public class Interest {
         this.interest_name = interest_name;
     }
 
+
     public List<User> getInterested() {
         return interested;
     }
 
     public void setInterested(List<User> interested) {
         this.interested = interested;
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+
     }
 }
