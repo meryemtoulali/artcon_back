@@ -53,19 +53,6 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update-interest/{userId}")
-    public ResponseEntity<Void> setUserInterests(@PathVariable Integer userId,@RequestBody List<Long> interestId){
-        try{
-            userService.selectInterest(userId, interestId);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
         try {
