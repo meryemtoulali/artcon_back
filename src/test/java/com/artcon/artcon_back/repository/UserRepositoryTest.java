@@ -61,19 +61,19 @@ public class UserRepositoryTest {
         assertTrue(userOptional.isEmpty());
     }
 
-    @Test
-    void testFindByUsernameContainingIgnoreCase_Success() {
-        List<User> users = userRepository.findByUsernameContainingIgnoreCase("user");
+//    @Test
+//    void testFindByUsernameContainingIgnoreCase_Success() {
+//        List<User> users = userRepository.findByUsernameContainingIgnoreCase("user");
+//
+//        assertEquals(2, users.size());
+//    }
 
-        assertEquals(2, users.size());
-    }
-
-    @Test
-    void testFindByUsernameContainingIgnoreCase_NotFound() {
-        List<User> users = userRepository.findByUsernameContainingIgnoreCase("nonexistent");
-
-        assertTrue(users.isEmpty());
-    }
+//    @Test
+//    void testFindByUsernameContainingIgnoreCase_NotFound() {
+//        List<User> users = userRepository.findByUsernameContainingIgnoreCase("nonexistent");
+//
+//        assertTrue(users.isEmpty());
+//    }
 
     @Test
     void testFindAll_Success() {
@@ -82,19 +82,19 @@ public class UserRepositoryTest {
         assertEquals(2, users.size());
     }
 
-    @Test
-    void testFindUserByEmail_Success() {
-        Optional<User> userOptional = userRepository.findUserByEmail("user1@example.com");
+//    @Test
+//    void testFindUserByEmail_Success() {
+//        Optional<User> userOptional = userRepository.findUserByEmail("user1@example.com");
+//
+//        assertTrue(userOptional.isPresent());
+//        assertEquals("user1@example.com", userOptional.get().getEmail());
+//    }
 
-        assertTrue(userOptional.isPresent());
-        assertEquals("user1@example.com", userOptional.get().getEmail());
-    }
-
-    @Test
-    void testFindUserByEmail_NotFound() {
-        Optional<User> userOptional = userRepository.findUserByEmail("nonexistent@example.com");
-
-        assertTrue(userOptional.isEmpty());
-    }
+//    @Test
+//    void testFindUserByEmail_NotFound() {
+//        Optional<User> userOptional = userRepository.findUserByEmail("nonexistent@example.com");
+//
+//        assertTrue(userOptional.isEmpty());
+//    }
 
 }

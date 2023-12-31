@@ -5,14 +5,9 @@ import com.artcon.artcon_back.model.PortfolioPost;
 import com.artcon.artcon_back.model.UpdateUserRequest;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,11 +46,10 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
+//    @BeforeEach
+//    public void setUp() {
+//        MockitoAnnotations.openMocks(this);
+//    }
     @Test
     void testFindAllUsers() {
         // Mock data
@@ -71,6 +65,14 @@ public class UserServiceTest {
         User expectedUser = new User();
         expectedUser.setId(1);
         expectedUser.setUsername("john_doe");
+        // Print the hashCode of the mocked userRepository to identify if it's the same instance
+        System.out.println("Mocked userRepository hashCode: " + userRepository.hashCode());
+
+        // Print the hashCode of the userService to identify if it's the same instance
+        System.out.println("Mocked userService hashCode: " + userService.hashCode());
+
+        // Print the hashCode of the userService userRepository to identify if it's the same instance
+        System.out.println("userService userRepository hashCode: " + userService.getUserRepository().hashCode());
 
         when(userRepository.findUserById(1)).thenReturn(Optional.of(expectedUser));
         User actualUser = userService.findUserById(1);

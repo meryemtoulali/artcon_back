@@ -216,4 +216,8 @@ public class UserService {
         return users;
 
     }
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
 }
