@@ -16,6 +16,8 @@ public interface PostRepository extends JpaRepository<Post ,Integer> {
     Post save(Post post);
     void deleteById(Integer post_id);
     List<Post> findByUserId(Integer user_id);
-    @Query("SELECT p FROM Post p JOIN User u ON p.interest IN elements(u.interestList) WHERE u.id = :userId AND p.user.id != :userId")
+    @Query("SELECT p FROM Post p JOIN User u ON p.user = u JOIN Followers f ON f.following = u WHERE f.follower.id = :userId" +
+            " UNION " +
+            "SELECT p FROM Post p JOIN User u ON p.interest IN elements(u.interestList) WHERE u.id = :userId AND p.user.id != :userId")
     List<Post> findPostsByUserInterestList(@Param("userId") Integer userId);
 }
