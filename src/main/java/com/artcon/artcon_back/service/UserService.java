@@ -9,7 +9,6 @@ import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +28,7 @@ public class UserService {
     private final InterestRepository interestRepository;
     private final FileStorageService fileStorageService;
     private final PostRepository postRepository;
+
     //Select user by
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -114,10 +114,10 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public List<User> searchUsers(String query) {
+    //public List<User> searchUsers(String query) {
         // searching by username containing the query
-        return userRepository.findByUsernameContainingIgnoreCase(query);
-    }
+    //    return userRepository.findByUsernameContainingIgnoreCase(query);
+    //}
 
     public LoginResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -206,5 +206,11 @@ public class UserService {
     //Get home filtered by interest
     public List<Post> getHomeFeed(Integer userId){
         return postRepository.findPostsByUserInterestList(userId);
+    }
+
+    public List<User> searchUsers(String query){
+        List<User> users = userRepository.searchUser(query);
+        return users;
+
     }
 }
