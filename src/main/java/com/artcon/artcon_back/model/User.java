@@ -1,9 +1,12 @@
 package com.artcon.artcon_back.model;
 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,6 +69,9 @@ public class User implements UserDetails {
     @JsonIgnore // Break the circular reference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PortfolioPost> portfolioPosts = new ArrayList<>();
+    @JsonDeserialize(contentAs = Interest.class)
+    @ManyToMany(mappedBy = "interested",cascade = CascadeType.ALL)
+    private List<Interest> interestList = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
@@ -214,6 +220,14 @@ public class User implements UserDetails {
         this.following_count = following_count;
     }
 
+
+    public List<Interest> getInterestList() {
+        return interestList;
+    }
+
+    public void setInterestList(List<Interest> interestList) {
+        this.interestList = interestList;
+    }
     public List<Post> getPosts() {
         return posts;
     }
@@ -221,4 +235,6 @@ public class User implements UserDetails {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
+
 }

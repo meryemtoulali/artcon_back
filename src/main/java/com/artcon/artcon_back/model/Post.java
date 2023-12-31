@@ -25,7 +25,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "interest_id")
     private Interest interest;
