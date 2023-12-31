@@ -4,6 +4,7 @@ import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.config.JwtService;
 import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.repository.InterestRepository;
+import com.artcon.artcon_back.repository.PostRepository;
 import com.artcon.artcon_back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -24,12 +25,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private InterestRepository interestRepository;
-    @Autowired
-    private FileStorageService fileStorageService;
+    private final UserRepository userRepository;
+    private final InterestRepository interestRepository;
+    private final FileStorageService fileStorageService;
+    private final PostRepository postRepository;
     //Select user by
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -204,4 +203,8 @@ public class UserService {
         userRepository.save(user);
     }
 
+    //Get home filtered by interest
+    public List<Post> getHomeFeed(Integer userId){
+        return postRepository.findPostsByUserInterestList(userId);
+    }
 }

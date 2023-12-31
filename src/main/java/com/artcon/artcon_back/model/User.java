@@ -207,7 +207,7 @@ public class User implements UserDetails {
 
     public void setInterestList(List<Interest> interestList) {
         this.interestList = interestList;
-
+    }
     public List<Post> getPosts() {
         return posts;
     }
@@ -215,4 +215,6 @@ public class User implements UserDetails {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
+
 }

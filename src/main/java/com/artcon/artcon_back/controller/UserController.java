@@ -5,6 +5,7 @@ import com.artcon.artcon_back.service.PostService;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -137,14 +138,17 @@ public class UserController {
         }
     }
 
-    @GetMapping("/home")
-    public ResponseEntity<List<Post>> getHome(){
+    @GetMapping("/{userId}/home")
+    public ResponseEntity<List<Post>> getHome(@PathVariable Integer userId){
         try{
-            List<Post> posts = postService.findAllPosts();
+//            List<Post> posts = postService.findAllPosts();
+            List<Post> posts = userService.getHomeFeed(userId);
             return ResponseEntity.ok(posts);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e){
+            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

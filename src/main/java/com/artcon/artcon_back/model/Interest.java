@@ -26,6 +26,7 @@ public class Interest {
             inverseJoinColumns = @JoinColumn(name = "user_Id"))
     private List<User> interested = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL)
     private List<Post> posts;
 
@@ -62,7 +63,7 @@ public class Interest {
 
     public void setInterested(List<User> interested) {
         this.interested = interested;
-
+    }
     public List<Post> getPosts() {
         return posts;
     }
