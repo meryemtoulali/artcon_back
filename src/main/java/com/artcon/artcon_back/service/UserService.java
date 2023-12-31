@@ -176,4 +176,6 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return user.getPortfolioPosts();
     }
+
+
 }
