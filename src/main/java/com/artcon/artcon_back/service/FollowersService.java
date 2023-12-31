@@ -17,6 +17,7 @@ public class FollowersService {
 
     @Autowired
     private UserRepository userRepository;
+
     @Transactional
 
     public void followUser(Integer followerId, Integer followingId) {
@@ -61,4 +62,6 @@ public class FollowersService {
     public boolean checkIfUserFollows(Integer followerId, Integer followingId) {
         return followersRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
+
+
 }
