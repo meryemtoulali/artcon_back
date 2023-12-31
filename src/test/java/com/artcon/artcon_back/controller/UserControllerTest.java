@@ -1,5 +1,5 @@
 package com.artcon.artcon_back.controller;
-import com.artcon.artcon_back.model.User;
+import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -75,4 +75,37 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    void deleteUser_ValidUserId_ReturnsOk() throws Exception {
+        int userId = 1;
+
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/user/{userId}", userId))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(userService, times(1)).deleteUser(userId);
+    }
+
+    @Test
+    void getPortfolioPosts_ValidUserId_ReturnsOk() throws Exception {
+        int userId = 1;
+        List<PortfolioPost> portfolioPosts = Arrays.asList(
+                new PortfolioPost(), new PortfolioPost()
+        );
+        when(userService.getPortfolioPosts(userId)).thenReturn(portfolioPosts);
+
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/{userId}/portfolio", userId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2));
+    }
+
+
+
+
+
+
 }
