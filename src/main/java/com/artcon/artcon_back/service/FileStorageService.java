@@ -25,7 +25,6 @@ public class FileStorageService{
         if(originalFileName == null){
             throw new BadRequestException("Original filename is null.");
         }
-//        Path path = new File(originalFileName).toPath();
         try {
             String contentType = file.getContentType();
             String fileUrl = dataBucketUtil.uploadFile(file, originalFileName, contentType);

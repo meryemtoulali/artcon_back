@@ -22,6 +22,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    private FirebaseUserService firebaseUserService;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -129,13 +132,24 @@ public class UserService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+
+        // Create the user in Firebase
+        try {
+            firebaseUserService.createUserInFirebase(user); // Create user in Firebase
+        } catch (Exception e) {
+            // Handle Firebase user creation error
+            throw new RuntimeException("Error creating user in Firebase", e);
+        }
+
         var jwtToken = jwtService.generateToken(user);
         return LoginResponse.builder()
                 .token(jwtToken)
                 .username(user.getUsername())
                 .userId(user.getId())
                 .build();
+
     }
+
 
     public LoginResponse login(LoginRequest request) {
         authenticationManager.authenticate(
@@ -144,6 +158,14 @@ public class UserService {
                         request.getPassword()
                 )
         );
+        // Fetch additional user details from Firebase if needed
+//        try {
+//            firebaseUserService.getUserDetailsFromFirebase(request.getUsername()); // Fetch user details from Firebase
+//        } catch (Exception e) {
+//            // Handle Firebase user details retrieval error
+//            throw new RuntimeException("Error retrieving user details from Firebase", e);
+//        }
+
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);

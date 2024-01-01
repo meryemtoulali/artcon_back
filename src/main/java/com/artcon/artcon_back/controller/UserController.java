@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.artcon.artcon_back.service.FirebaseUserService;
+
 
 import java.util.List;
 
@@ -16,6 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @Autowired
+    private FirebaseUserService firebaseUserService;
+
 
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
