@@ -3,9 +3,12 @@ package com.artcon.artcon_back.service;
 import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.config.JwtService;
 import com.artcon.artcon_back.model.*;
-import com.artcon.artcon_back.repository.PortfolioPostRepository;
+import com.artcon.artcon_back.repository.InterestRepository;
+import com.artcon.artcon_back.repository.PostRepository;
 import com.artcon.artcon_back.repository.UserRepository;
+import com.google.firebase.auth.UserRecord;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,12 +27,16 @@ public class UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    private FirebaseUserService firebaseUserService;
+    private final FirebaseUserService firebaseUserService;
 
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private FileStorageService fileStorageService;
+
+    private final InterestRepository interestRepository;
+    private final PostRepository postRepository;
+
     //Select user by
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -113,10 +121,10 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public List<User> searchUsers(String query) {
+    //public List<User> searchUsers(String query) {
         // searching by username containing the query
-        return userRepository.findByUsernameContainingIgnoreCase(query);
-    }
+    //    return userRepository.findByUsernameContainingIgnoreCase(query);
+    //}
 
     public LoginResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -128,6 +136,9 @@ public class UserService {
                 .birthday(request.getBirthday())
                 .gender(request.getGender())
                 .phone_number(request.getPhonenumber())
+                .followers_count(0)
+                .following_count(0)
+                .phone_number(request.getPhonenumber())
                 .password_hash(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
@@ -136,8 +147,10 @@ public class UserService {
         // Create the user in Firebase
         try {
             firebaseUserService.createUserInFirebase(user); // Create user in Firebase
+            System.out.println("User created in Firebase: " + user.getUsername());
         } catch (Exception e) {
             // Handle Firebase user creation error
+            System.out.println("Error creating user in Firebase: " + e.getMessage());
             throw new RuntimeException("Error creating user in Firebase", e);
         }
 
@@ -195,4 +208,44 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return user.getPortfolioPosts();
     }
+
+    @Transactional
+    public void selectInterest(Integer userId,List<Long> interests){
+        User user = userRepository.findUserById(userId).orElseThrow(
+                () -> new EntityNotFoundException("User not found")
+        );
+
+        List<Interest> interestList = new ArrayList<>();
+        for (Long id : interests) {
+            // get the interest by id
+            Interest interest = interestRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Interest not found"));
+
+            //Add user to interest
+            interest.getInterested().add(user);
+            interestRepository.save(interest);
+
+            // Add interest to list
+            interestList.add(interest);
+        }
+
+        user.setInterestList(interestList);
+        // Save changes to user
+        userRepository.save(user);
+    }
+
+    //Get home filtered by interest
+    public List<Post> getHomeFeed(Integer userId){
+        return postRepository.findPostsByUserInterestList(userId);
+    }
+
+    public List<User> searchUsers(String query){
+        List<User> users = userRepository.searchUser(query);
+        return users;
+
+    }
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
 }

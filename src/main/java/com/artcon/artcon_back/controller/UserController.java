@@ -1,9 +1,12 @@
 package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.*;
+import com.artcon.artcon_back.service.PostService;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final PostService postService;
 
     @Autowired
     private FirebaseUserService firebaseUserService;
@@ -59,6 +63,19 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-interest/{userId}")
+    public ResponseEntity<Void> setUserInterests(@PathVariable Integer userId,@RequestBody List<Long> interestId){
+        try{
+            userService.selectInterest(userId, interestId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
         try {
@@ -72,9 +89,8 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
-        List<User> users = userService.searchUsers(query);
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<User>> searchUsers(@RequestParam("query") String query) {
+        return ResponseEntity.ok(userService.searchUsers(query));
     }
 
     @PostMapping("/register")
@@ -130,4 +146,18 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/home")
+    public ResponseEntity<List<Post>> getHome(@PathVariable Integer userId){
+        try{
+//            List<Post> posts = postService.findAllPosts();
+            List<Post> posts = userService.getHomeFeed(userId);
+            return ResponseEntity.ok(posts);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e){
+            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
