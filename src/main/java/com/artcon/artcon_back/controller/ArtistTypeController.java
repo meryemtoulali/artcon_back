@@ -1,7 +1,6 @@
 package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.ArtistType;
-import com.artcon.artcon_back.model.User;
 import com.artcon.artcon_back.service.ArtistTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
