@@ -1,10 +1,8 @@
 package com.artcon.artcon_back.model;
 
-import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
 

@@ -13,6 +13,11 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     //List<User> findByUsernameContainingIgnoreCase(String query);
     List<User> findAll();
     //Optional<User> findUserByEmail(String email);
-    @Query("SELECT user FROM User user WHERE " + "LOWER(user.username) LIKE LOWER(CONCAT('%',:query, '%'))" + "OR LOWER(user.firstname) LIKE LOWER(CONCAT('%',:query, '%'))" + "OR LOWER(user.lastname) LIKE LOWER(CONCAT('%',:query, '%'))" + "OR LOWER(CONCAT(user.firstname, ' ', user.lastname)) LIKE LOWER(CONCAT('%',:query, '%'))")
+    @Query("SELECT user FROM User user WHERE " +
+            "LOWER(user.username) LIKE LOWER(CONCAT('%',:query, '%'))" +
+            "OR LOWER(user.firstname) LIKE LOWER(CONCAT('%',:query, '%'))" +
+            "OR LOWER(user.lastname) LIKE LOWER(CONCAT('%',:query, '%'))" +
+            "OR LOWER(user.title) LIKE LOWER(CONCAT('%',:query, '%'))" +
+            "OR LOWER(CONCAT(user.firstname, ' ', user.lastname)) LIKE LOWER(CONCAT('%',:query, '%'))")
     List<User> searchUser(String query);
 }

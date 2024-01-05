@@ -1,12 +1,8 @@
 package com.artcon.artcon_back.model;
 
-
+import com.artcon.artcon_back.token.Token;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +29,9 @@ public class User implements UserDetails {
     private Integer id;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
     @Column(name = "firstname")
     private String firstname;
     @Column(name = "lastname")
@@ -235,6 +234,4 @@ public class User implements UserDetails {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-
-
 }

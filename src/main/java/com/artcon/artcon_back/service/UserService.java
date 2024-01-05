@@ -6,6 +6,9 @@ import com.artcon.artcon_back.model.*;
 import com.artcon.artcon_back.repository.InterestRepository;
 import com.artcon.artcon_back.repository.PostRepository;
 import com.artcon.artcon_back.repository.UserRepository;
+import com.artcon.artcon_back.token.Token;
+import com.artcon.artcon_back.token.TokenRepository;
+import com.artcon.artcon_back.token.TokenType;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final InterestRepository interestRepository;
+    private final TokenRepository tokenRepository;
     private final FileStorageService fileStorageService;
     private final PostRepository postRepository;
 
@@ -131,12 +135,12 @@ public class UserService {
                 .phone_number(request.getPhonenumber())
                 .followers_count(0)
                 .following_count(0)
-                .phone_number(request.getPhonenumber())
                 .password_hash(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
+        var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        savedUserToken(savedUser, jwtToken);
         return LoginResponse.builder()
                 .token(jwtToken)
                 .username(user.getUsername())
@@ -154,11 +158,35 @@ public class UserService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        savedUserToken(user, jwtToken);
         return LoginResponse.builder()
                 .token(jwtToken)
                 .username(user.getUsername())
                 .userId(user.getId())
                 .build();
+    }
+
+    private void savedUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
     }
 
     public void uploadProfilePicture(Integer userId, MultipartFile file) {
@@ -214,7 +242,6 @@ public class UserService {
     public List<User> searchUsers(String query){
         List<User> users = userRepository.searchUser(query);
         return users;
-
     }
     public UserRepository getUserRepository() {
         return userRepository;
