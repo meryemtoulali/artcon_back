@@ -30,10 +30,13 @@ public class PostController {
                                     @RequestParam("interest_id") Long interestId){
 
         PostRequest postRequest = new PostRequest(userId, description, mediafiles, interestId);
-        postService.submitPostToDB(postRequest);
+        Post postRes = postService.submitPostToDB(postRequest);
+        Integer postId = postRes.getId();
+        System.out.println("id post after save"+ postId);
         PostResponse result= new PostResponse();
         result.setSuccess(true);
         result.setMessage("Post added successfully");
+        result.setPostId(postId);
         return result;
     }
 
