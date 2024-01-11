@@ -44,7 +44,7 @@ public class PortfolioPostServiceTest {
         portfolioPostRequest.setTitle("Test Title");
         portfolioPostRequest.setCaption("Test Caption");
 
-        User user = new User();
+        User user = new User(tokens, title, postlikes);
         user.setId(1);
         user.setType("ARTIST");
 

@@ -38,6 +38,10 @@ public class Post {
     @Column(name = "dateTime")
     private Date date;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostLike> postLikes;
+
 
     public Integer getId() {
         return id;

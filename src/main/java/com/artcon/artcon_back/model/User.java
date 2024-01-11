@@ -74,12 +74,22 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PostLike> postlikes;
     @JsonIgnore
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Followers> followers = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Followers> following = new ArrayList<>();
+
+    public User(List<Token> tokens, String title, List<PostLike> postlikes) {
+        this.tokens = tokens;
+        this.title = title;
+        this.postlikes = postlikes;
+    }
 
     @Override
     public String toString() {
