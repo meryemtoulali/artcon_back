@@ -85,10 +85,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Followers> following = new ArrayList<>();
 
-    public User(List<Token> tokens, String title, List<PostLike> postlikes) {
+    public User(List<Token> tokens, String title) {
         this.tokens = tokens;
         this.title = title;
-        this.postlikes = postlikes;
     }
 
     @Override
