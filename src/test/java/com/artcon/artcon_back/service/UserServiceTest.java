@@ -62,7 +62,7 @@ public class UserServiceTest {
 
     @Test
     void testFindUserById() {
-        User expectedUser = new User(tokens, title, postlikes);
+        User expectedUser = new User();
         expectedUser.setId(1);
         expectedUser.setUsername("john_doe");
         // Print the hashCode of the mocked userRepository to identify if it's the same instance
@@ -86,7 +86,7 @@ public class UserServiceTest {
         // Mock data
         Integer userId = 1;
         UpdateUserRequest updateUserRequest = new UpdateUserRequest();
-        User user = new User(tokens, title, postlikes);
+        User user = new User();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         try {
             when(fileStorageService.saveFile(any(MultipartFile.class))).thenReturn("fileUrl");
@@ -111,7 +111,7 @@ public class UserServiceTest {
     void testUploadProfilePicture() {
         // Mock data
         Integer userId = 1;
-        User user = new User(tokens, title, postlikes);
+        User user = new User();
         user.setId(userId);
         when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
         MockMultipartFile mockFile = new MockMultipartFile("file", "test.jpg", "image/jpeg", "Some image content".getBytes());
@@ -129,7 +129,7 @@ public class UserServiceTest {
     void testGetPortfolioPosts() {
         // Mock data
         Integer userId = 1;
-        User user = new User(tokens, title, postlikes);
+        User user = new User();
         user.setId(userId);
 
         PortfolioPost post1 = new PortfolioPost();

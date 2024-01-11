@@ -29,7 +29,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     private User createUser(int id, String username, String email) {
-        User user = new User(tokens, title, postlikes);
+        User user = new User();
         user.setId(id);
         user.setUsername(username);
         user.setEmail(email);
