@@ -85,9 +85,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Followers> following = new ArrayList<>();
 
-    public User() {
-    }
-
     @Override
     public String toString() {
         return "User{" +
