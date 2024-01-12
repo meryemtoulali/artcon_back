@@ -78,6 +78,11 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostLike> postlikes;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     @JsonIgnore
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Followers> followers = new ArrayList<>();

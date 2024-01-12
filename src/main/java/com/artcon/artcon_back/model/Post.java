@@ -42,6 +42,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
     public Integer getId() {
         return id;
