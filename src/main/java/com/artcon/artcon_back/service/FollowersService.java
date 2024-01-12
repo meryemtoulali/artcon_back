@@ -23,8 +23,6 @@ public class FollowersService {
     public void followUser(Integer followerId, Integer followingId) {
         // Check if the user is not trying to follow themselves
         if (!followerId.equals(followingId)) {
-            // followersRepository.save(new Followers(follower, following));
-
             User follower = userRepository.findById(followerId).orElseThrow(
                     () -> new EntityNotFoundException("User not found"));
             User following = userRepository.findById(followingId).orElseThrow(

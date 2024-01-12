@@ -1,6 +1,4 @@
 package com.artcon.artcon_back.model;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,18 +28,4 @@ public class PortfolioPost {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-//    // Transient fields for user information when retrieving a portfolio post
-//    @Transient
-//    private Integer userId;
-//
-//    @Transient
-//    private String username;
-//
-//    @Transient
-//    private String firstname;
-//
-//    @Transient
-//    private String lastname;
-
 }

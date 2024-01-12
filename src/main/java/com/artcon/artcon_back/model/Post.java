@@ -1,6 +1,5 @@
 package com.artcon.artcon_back.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -39,6 +38,13 @@ public class Post {
     @Column(name = "dateTime")
     private Date date;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostLike> postLikes;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
     public Integer getId() {
         return id;

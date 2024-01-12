@@ -1,18 +1,8 @@
 package com.artcon.artcon_back.model;
 
-public class PostResponse {
+public class LikeRes {
     private boolean success;
     private String message;
-
-    private Integer postId;
-
-    public Integer getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Integer postId) {
-        this.postId = postId;
-    }
 
     public boolean isSuccess() {
         return success;

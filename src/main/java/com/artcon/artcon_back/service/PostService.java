@@ -95,7 +95,6 @@ public class PostService {
         Post result= postRepo.save(postToSave);
         System.out.println("Post saved successfully:"+ result);
         return result;
-
     }
 
     public Post getPost(Integer post_id){
@@ -127,6 +126,11 @@ public class PostService {
             // Handle the case where the long value is outside the range of Integer
             throw new IllegalArgumentException("Long value is out of the range of Integer");
         }
+    }
+
+    public List<Post> searchPosts(String query){
+        List<Post> posts = postRepo.searchPosts(query);
+        return posts;
     }
 
 }

@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/portfolio")
 @RequiredArgsConstructor
@@ -41,8 +39,6 @@ public class PortfolioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    //get all portfolio posts for a user: check UserController
 
     //edit portfolio post
     @PutMapping("/{portfolioPostId}")
