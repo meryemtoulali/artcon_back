@@ -24,20 +24,27 @@ public class LikeController {
     UserService userService;
 
     @PostMapping("/like")
-    public ResponseEntity<?> likePost( @RequestBody LikeRequest request) {
+    public LikeRes likePost( @RequestBody LikeRequest request) {
         Integer userId = request.getUser_id();
         Integer postId = request.getPost_id();
         //Post post = postService.getPost(postId);
         likeService.likePost(userId, postId);
-        return ResponseEntity.ok("Post liked successfully");
+        LikeRes res = new LikeRes();
+        res.setSuccess(true);
+        res.setMessage("Post liked successfully");
+        return res;
     }
     @PostMapping("/dislike")
-    public ResponseEntity<?> dislikePost( @RequestBody LikeRequest request) {
+    public LikeRes dislikePost( @RequestBody LikeRequest request) {
         Integer userId = request.getUser_id();
         Integer postId = request.getPost_id();
         //Post post = postService.getPost(postId);
         likeService.dislikePost(userId, postId);
-        return ResponseEntity.ok("Post disliked successfully");
+
+        LikeRes res = new LikeRes();
+        res.setSuccess(true);
+        res.setMessage("Post disliked successfully");
+        return res;
     }
 
     @GetMapping("/hasUserLikedPost")
