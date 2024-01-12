@@ -58,6 +58,23 @@ public class PostController {
         System.out.println("get posts:" + posts.toString());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+    @GetMapping("/{postId}/likes")
+    public ResponseEntity<Integer> getLikeCount(@PathVariable Integer postId) {
+        try {
+            // Retrieve the post from the database
+            Post post = postService.getPost(postId);
+
+            if (post != null) {
+                // Get and return the like count
+                Integer likeCount = post.getLikes();
+                return ResponseEntity.ok(likeCount);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
     @DeleteMapping("/delete/{post_id}")
     public PostResponse deletePost(@PathVariable Integer post_id){
         postService.deletePost(post_id);
