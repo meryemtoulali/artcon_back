@@ -89,6 +89,7 @@ public class PostService {
         postToSave.setMediaFiles(mediaFiles);
         postToSave.setDate(date);
         postToSave.setLikes(0);
+        postToSave.setComments_count(0);
 
         System.out.println("now we set user hahahahahaha: " + user.getUsername());
 

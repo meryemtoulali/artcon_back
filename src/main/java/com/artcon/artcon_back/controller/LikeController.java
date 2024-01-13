@@ -27,7 +27,6 @@ public class LikeController {
     public LikeRes likePost( @RequestBody LikeRequest request) {
         Integer userId = request.getUser_id();
         Integer postId = request.getPost_id();
-        //Post post = postService.getPost(postId);
         likeService.likePost(userId, postId);
         LikeRes res = new LikeRes();
         res.setSuccess(true);

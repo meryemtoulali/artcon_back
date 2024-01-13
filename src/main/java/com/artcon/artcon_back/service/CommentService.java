@@ -34,6 +34,9 @@ public class CommentService {
         Post post = postService.getPost(comment_post_id);
         String content = commentRequest.getContent();
 
+        post.setComments_count(post.getComments_count() + 1);
+        postRepository.save(post);
+
         Comment comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);

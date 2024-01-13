@@ -42,6 +42,33 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes;
 
+    @Column(name = "comments_count")
+    private  Integer comments_count;
+
+    public List<PostLike> getPostLikes() {
+        return postLikes;
+    }
+
+    public void setPostLikes(List<PostLike> postLikes) {
+        this.postLikes = postLikes;
+    }
+
+    public Integer getComments_count() {
+        return comments_count;
+    }
+
+    public void setComments_count(Integer comments_count) {
+        this.comments_count = comments_count;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
