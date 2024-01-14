@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -22,12 +23,22 @@ public class UserRepositoryTest {
                         .id(1)
                 .username("user1")
                 .email("user1@example.com")
+                .firstname("John")
+                .lastname("Doe")
+                .title("Developer")
+                .type("Employee")
+                .location("City1")
                 .build());
 
         userRepository.save(User.builder()
                         .id(2)
                 .username("user2")
                 .email("user2@example.com")
+                .firstname("Jane")
+                .lastname("Smith")
+                .title("Designer")
+                .type("Contractor")
+                .location("City2")
                 .build());
     }
 
@@ -46,13 +57,20 @@ public class UserRepositoryTest {
         assertTrue(userOptional.isEmpty());
     }
 
-//    @Test
-//    void testFindUserById_Success() {
-//        User user = userRepository.findUserById(1).orElseThrow();
-//
-//        assertNotNull(user);
-//        assertEquals(1, user.getId());
-//    }
+    @Test
+    void testFindUserById_Success() {
+        Optional<User> savedUserOptional = userRepository.findByUsername("user1");
+
+        assertTrue(savedUserOptional.isPresent());
+
+        Integer userId = savedUserOptional.get().getId();
+
+        Optional<User> userOptional = userRepository.findUserById(userId);
+
+        assertTrue(userOptional.isPresent());
+        assertEquals("user1", userOptional.get().getUsername());
+    }
+
 
     @Test
     void testFindUserById_NotFound() {
@@ -61,20 +79,6 @@ public class UserRepositoryTest {
         assertTrue(userOptional.isEmpty());
     }
 
-//    @Test
-//    void testFindByUsernameContainingIgnoreCase_Success() {
-//        List<User> users = userRepository.findByUsernameContainingIgnoreCase("user");
-//
-//        assertEquals(2, users.size());
-//    }
-
-//    @Test
-//    void testFindByUsernameContainingIgnoreCase_NotFound() {
-//        List<User> users = userRepository.findByUsernameContainingIgnoreCase("nonexistent");
-//
-//        assertTrue(users.isEmpty());
-//    }
-
     @Test
     void testFindAll_Success() {
         List<User> users = userRepository.findAll();
@@ -82,19 +86,18 @@ public class UserRepositoryTest {
         assertEquals(2, users.size());
     }
 
-//    @Test
-//    void testFindUserByEmail_Success() {
-//        Optional<User> userOptional = userRepository.findUserByEmail("user1@example.com");
-//
-//        assertTrue(userOptional.isPresent());
-//        assertEquals("user1@example.com", userOptional.get().getEmail());
-//    }
+    @Test
+    void testSearchUser_Success() {
+        List<User> result = userRepository.searchUser("John", "Developer", "Employee", "City1");
 
-//    @Test
-//    void testFindUserByEmail_NotFound() {
-//        Optional<User> userOptional = userRepository.findUserByEmail("nonexistent@example.com");
-//
-//        assertTrue(userOptional.isEmpty());
-//    }
+        assertEquals(1,result.size());
+        assertEquals("user1", result.get(0).getUsername());
+    }
 
+    @Test
+    void testSearchUser_NoResults() {
+        List<User> result = userRepository.searchUser("Nonexistent", "Developer", "Employee", "City1");
+
+        assertTrue(result.isEmpty());
+    }
 }

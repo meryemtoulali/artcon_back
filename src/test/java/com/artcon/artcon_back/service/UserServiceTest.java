@@ -1,30 +1,28 @@
 package com.artcon.artcon_back.service;
 
 import com.artcon.artcon_back.config.JwtService;
-import com.artcon.artcon_back.model.PortfolioPost;
-import com.artcon.artcon_back.model.UpdateUserRequest;
-import com.artcon.artcon_back.model.User;
+import com.artcon.artcon_back.model.*;
+import com.artcon.artcon_back.repository.InterestRepository;
 import com.artcon.artcon_back.repository.UserRepository;
+import com.artcon.artcon_back.token.Token;
+import com.artcon.artcon_back.token.TokenRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-
 public class UserServiceTest {
 
 
@@ -46,10 +44,12 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-//    @BeforeEach
-//    public void setUp() {
-//        MockitoAnnotations.openMocks(this);
-//    }
+    @Mock
+    private InterestRepository interestRepository;
+
+    @Mock
+    private TokenRepository tokenRepository;
+
     @Test
     void testFindAllUsers() {
         // Mock data
@@ -152,6 +152,84 @@ public class UserServiceTest {
         assertEquals(2, result.size());
         assertEquals(post1, result.get(0));
         assertEquals(post2, result.get(1));
+    }
+
+    @Test
+    void testRegister_Success() {
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .firstname("spencer")
+                .lastname("reid")
+                .gender("Male")
+                .birthday(new Date())
+                .email("spencer@gmail.com")
+                .phonenumber("7775558982")
+                .location("Rabat")
+                .password("admin")
+                .username("spence")
+                .build();
+        User savedUser = User.builder()
+                .id(1)
+                .username("spence")
+                .build();
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+
+        String expectedToken = "help";
+        when(jwtService.generateToken(any(User.class))).thenReturn(expectedToken);
+
+        LoginResponse loginResponse = userService.register(registerRequest);
+
+        assertEquals(expectedToken, loginResponse.getToken());
+        assertEquals("spence", loginResponse.getUsername());
+
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(jwtService, times(1)).generateToken(any(User.class));
+        verify(tokenRepository, times(1)).save(any(Token.class));
+    }
+
+    @Test
+    void testLogin_Success() {
+        LoginRequest loginRequest = new LoginRequest("spence", "password");
+        User existingUser = User.builder().id(1).username("spence").build();
+
+        when(userRepository.findByUsername("spence")).thenReturn(Optional.of(existingUser));
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(null);
+        when(jwtService.generateToken(any(User.class))).thenReturn("jwtToken");
+        when(tokenRepository.findAllValidTokenByUser(1)).thenReturn(new ArrayList<>());
+
+        LoginResponse loginResponse = userService.login(loginRequest);
+
+        assertEquals("jwtToken", loginResponse.getToken());
+        assertEquals("spence", loginResponse.getUsername());
+        assertEquals(1, loginResponse.getUserId());
+
+        verify(userRepository, times(1)).findByUsername("spence");
+        verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
+        verify(jwtService, times(1)).generateToken(any(User.class));
+        verify(tokenRepository, times(1)).findAllValidTokenByUser(1);
+        verify(tokenRepository, times(1)).save(any(Token.class));
+    }
+
+    @Test
+    void testSearchUsers() {
+        String query = "john";
+        String title = "developer";
+        String type = "employee";
+        String location = "city";
+
+        List<User> expectedUsers = new ArrayList<>();
+        expectedUsers.add(User.builder().id(1).username("john_doe").title("Developer").type("Employee").location("City").build());
+        expectedUsers.add(User.builder().id(2).username("john_smith").title("Developer").type("Contractor").location("City").build());
+
+        when(userRepository.searchUser(query, title, type, location)).thenReturn(expectedUsers);
+
+        List<User> actualUsers = userService.searchUsers(query, title, type, location);
+
+        assertEquals(expectedUsers.size(), actualUsers.size());
+        for (int i = 0; i < expectedUsers.size(); i++) {
+            assertEquals(expectedUsers.get(i).getId(), actualUsers.get(i).getId());
+        }
+
+        verify(userRepository, times(1)).searchUser(query, title, type, location);
     }
 
 }

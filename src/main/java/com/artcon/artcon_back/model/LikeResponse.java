@@ -1,6 +1,6 @@
 package com.artcon.artcon_back.model;
 
-public class LikeRes {
+public class LikeResponse {
     private boolean success;
     private String message;
 
