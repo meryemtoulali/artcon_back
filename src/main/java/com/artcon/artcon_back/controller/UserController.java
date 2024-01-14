@@ -151,4 +151,32 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity<List<User>> getUserFollowers(@PathVariable Integer userId) {
+        try {
+            List<User> followers = userService.getUserFollowers(userId);
+            return ResponseEntity.ok(followers);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<List<User>> getUserFollowing(@PathVariable Integer userId) {
+        try {
+            List<User> following = userService.getUserFollowing(userId);
+            return ResponseEntity.ok(following);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
 }

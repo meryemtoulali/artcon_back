@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -118,11 +119,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    //public List<User> searchUsers(String query) {
-        // searching by username containing the query
-    //    return userRepository.findByUsernameContainingIgnoreCase(query);
-    //}
-
     public LoginResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -188,6 +184,43 @@ public class UserService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
+
+    public List<User> getUserFollowers(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<Followers> followersList = user.getFollowing();
+//        return followersList;
+        return extractUserListFromFollowingList(followersList);
+    }
+
+    public List<User> getUserFollowing(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<Followers> followingList = user.getFollowers();
+        return extractUserListFromFollowersList(followingList);
+//        return followingList;
+    }
+
+    private List<User> extractUserListFromFollowingList(List<Followers> followersList) {
+        List<User> userList = followersList.stream()
+                .map(Followers::getFollower)
+                .collect(Collectors.toList());
+
+        return userList;
+    }
+
+    private List<User> extractUserListFromFollowersList(List<Followers> followersList) {
+        List<User> userList = followersList.stream()
+                .map(Followers::getFollowing)
+                .collect(Collectors.toList());
+
+        return userList;
+    }
+
+
+
 
     public void uploadProfilePicture(Integer userId, MultipartFile file) {
         User user = userRepository.findUserById(userId)
