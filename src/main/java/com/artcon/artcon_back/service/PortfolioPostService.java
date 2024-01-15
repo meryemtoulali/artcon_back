@@ -56,6 +56,7 @@ public class PortfolioPostService {
                 .date(currentDate)
                 .title(portfolioPostRequest.getTitle())
                 .caption(portfolioPostRequest.getCaption())
+                .likes(0)
                 .media(fileUrl)
                 .build();
         System.out.println("Built portfoliopost");
