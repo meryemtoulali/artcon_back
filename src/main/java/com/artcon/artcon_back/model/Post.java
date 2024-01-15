@@ -3,10 +3,13 @@ package com.artcon.artcon_back.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Builder
 @Table(name = "\"post\"")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Post {
@@ -32,6 +35,22 @@ public class Post {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id" , referencedColumnName = "post_id")
     private List<MediaFile> mediaFiles;
+
+    public Post(Integer id, String description, User user, Interest interest, List<MediaFile> mediaFiles, Integer likes, Date date, List<PostLike> postLikes, Integer comments_count, List<Comment> comments) {
+        this.id = id;
+        this.description = description;
+        this.user = user;
+        this.interest = interest;
+        this.mediaFiles = mediaFiles;
+        this.likes = likes;
+        this.date = date;
+        this.postLikes = postLikes;
+        this.comments_count = comments_count;
+        this.comments = comments;
+    }
+
+    public Post() {
+    }
 
     @Column(name = "likes")
     private Integer likes;

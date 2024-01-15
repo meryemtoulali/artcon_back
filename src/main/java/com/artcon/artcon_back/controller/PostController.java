@@ -65,7 +65,6 @@ public class PostController {
             Post post = postService.getPost(postId);
 
             if (post != null) {
-                // Get and return the like count
                 Integer likeCount = post.getLikes();
                 return ResponseEntity.ok(likeCount);
             } else {

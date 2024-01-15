@@ -3,13 +3,16 @@ package com.artcon.artcon_back.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.List;
 
 @Entity
+@Builder
 @Table(name = "post_like")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PostLike {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -46,5 +49,14 @@ public class PostLike {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public PostLike(Integer id, User user, Post post) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+    }
+
+    public PostLike() {
     }
 }
