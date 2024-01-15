@@ -2,8 +2,6 @@ package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.Comment;
 import com.artcon.artcon_back.model.CommentRequest;
-import com.artcon.artcon_back.model.LikeRequest;
-import com.artcon.artcon_back.model.LikeRes;
 import com.artcon.artcon_back.repository.CommentRepository;
 import com.artcon.artcon_back.service.CommentService;
 import lombok.RequiredArgsConstructor;
