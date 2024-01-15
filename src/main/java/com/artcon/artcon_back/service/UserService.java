@@ -12,7 +12,6 @@ import com.artcon.artcon_back.token.TokenType;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -272,8 +271,8 @@ public class UserService {
         return postRepository.findPostsByUserInterestList(userId);
     }
 
-    public List<User> searchUsers(String query){
-        List<User> users = userRepository.searchUser(query);
+    public List<User> searchUsers(String query, String title, String type, String location){
+        List<User> users = userRepository.searchUser(query,title,type,location);
         return users;
     }
     public UserRepository getUserRepository() {

@@ -5,8 +5,6 @@ import com.artcon.artcon_back.service.PostService;
 import com.artcon.artcon_back.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,8 +78,12 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<User>> searchUsers(@RequestParam("query") String query) {
-        return ResponseEntity.ok(userService.searchUsers(query));
+    public ResponseEntity<List<User>> searchUsers(@RequestParam("query") String query,
+                                                  @RequestParam(name = "title", required = false) String title,
+                                                  @RequestParam(name = "type", required = false) String type,
+                                                  @RequestParam(name = "location", required = false) String location
+    ) {
+        return ResponseEntity.ok(userService.searchUsers(query, title, type, location));
     }
 
     @PostMapping("/register")

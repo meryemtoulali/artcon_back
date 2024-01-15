@@ -1,11 +1,9 @@
 package com.artcon.artcon_back.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Builder;
 
-import java.util.List;
 
 @Entity
 @Builder

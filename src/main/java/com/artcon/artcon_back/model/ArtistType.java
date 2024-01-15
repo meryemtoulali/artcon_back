@@ -36,4 +36,5 @@ public class ArtistType {
     public void setArtist_type_name(String artist_type_name) {
         this.artist_type_name = artist_type_name;
     }
+
 }

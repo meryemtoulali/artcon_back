@@ -1,6 +1,5 @@
 package com.artcon.artcon_back.repository;
 
-import com.artcon.artcon_back.model.Post;
 import com.artcon.artcon_back.model.PostLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

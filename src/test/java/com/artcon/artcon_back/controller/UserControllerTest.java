@@ -6,15 +6,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -103,9 +108,71 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2));
     }
 
+    @Test
+    void registerSuccessfulReturnsCreated() {
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .firstname("spencer")
+                .lastname("reid")
+                .gender("Male")
+                .birthday(new Date())
+                .email("spencer@gmail.com")
+                .phonenumber("7775558982")
+                .location("Rabat")
+                .password("admin")
+                .username("spence")
+                .build();
 
+        LoginResponse mockLoginResponse = new LoginResponse("token","spence",1);
+        when(userService.register(Mockito.any(RegisterRequest.class))).thenReturn(mockLoginResponse);
 
+        ResponseEntity<LoginResponse> responseEntity = userController.register(registerRequest);
 
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(mockLoginResponse, responseEntity.getBody());
+    }
 
+    @Test
+    void registerFailureReturnsInternalServerError() {
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .firstname("spencer")
+                .lastname("reid")
+                .gender("Male")
+                .birthday(new Date())
+                .email("spencer@gmail.com")
+                .phonenumber("7775558982")
+                .location("Rabat")
+                .password("admin")
+                .username("spence")
+                .build();
 
+        when(userService.register(Mockito.any(RegisterRequest.class))).thenThrow(new RuntimeException("Registration failed"));
+
+        ResponseEntity<LoginResponse> responseEntity = userController.register(registerRequest);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void loginSuccessfulReturnsOK() {
+        LoginRequest loginRequest = new LoginRequest("spence","admin");
+
+        LoginResponse mockLoginResponse = new LoginResponse("token","spence",1);
+        when(userService.login(Mockito.any(LoginRequest.class))).thenReturn(mockLoginResponse);
+
+        ResponseEntity<LoginResponse> responseEntity = userController.login(loginRequest);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockLoginResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void login_LoginFailure_ReturnsInternalServerError() {
+        LoginRequest loginRequest = new LoginRequest("spence","admin");
+
+        when(userService.login(Mockito.any(LoginRequest.class))).thenThrow(new RuntimeException("Login failed"));
+
+        ResponseEntity<LoginResponse> responseEntity = userController.login(loginRequest);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+    }
 }
