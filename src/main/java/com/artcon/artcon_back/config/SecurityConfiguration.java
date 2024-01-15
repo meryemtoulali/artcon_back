@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/user/register").permitAll()
                                 .requestMatchers("/demo").authenticated() // Require authentication for any other request under /user/**
                                 .requestMatchers("/location/**").permitAll()
+                                .requestMatchers("/like").permitAll()
                                 .anyRequest().permitAll()             // Authenticate any other request
                                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
