@@ -1,7 +1,6 @@
 package com.artcon.artcon_back.controller;
 
 import com.artcon.artcon_back.model.LikeRequest;
-import com.artcon.artcon_back.model.LikeRes;
 import com.artcon.artcon_back.service.LikeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
